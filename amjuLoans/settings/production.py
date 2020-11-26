@@ -126,8 +126,12 @@ WSGI_APPLICATION = 'amjuLoans.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db_amjuLoans_new.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd7epjljjk3gfm0',
+        'USER': 'sjefusmocigoqw',
+        'PASSWORD': '43845d756c8c04404dc20e947aacd783852725ba7271dd5b641d6d8106dc2f82',
+        'HOST': 'ec2-23-22-156-110.compute-1.amazonaws.com',
+        'PORT': '5432'
     }
 }
 
