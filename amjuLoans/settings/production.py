@@ -16,6 +16,7 @@ import os
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -23,20 +24,21 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 SECRET_KEY = '(=vw2)fyh)4uit)gty2z7g-icg$3a^zc3w-eb)v+)@tncxd%))'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
+
+BASE_URL = 'https://www.loans.amjuuniquemfbng.com'
 
 ALLOWED_HOSTS = ['*']
 
-BASE_URL = 'https://www.minloans.com.ng'
-
 MANAGERS = (
-    ('Minloans NG', "minloansnigeria@gmail.com"),
-    ('Minloans NG', "customer@minloans.com.ng")
+    ('AMJU UNIQUE MFB', "minloansnigeria@gmail.com"),
+    ('AMJU UNIQUE MFB', "customer@minloans.com.ng")
 )
 
 ADMINS = MANAGERS
 
 AUTH_USER_MODEL = 'accounts.User'
+
 
 # Application definition
 
@@ -95,7 +97,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'amjuLoans.urls'
 
-
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
@@ -119,19 +120,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'amjuLoans.wsgi.application'
 
+
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd7epjljjk3gfm0',
-        'USER': 'sjefusmocigoqw',
-        'PASSWORD': '43845d756c8c04404dc20e947aacd783852725ba7271dd5b641d6d8106dc2f82',
-        'HOST': 'ec2-23-22-156-110.compute-1.amazonaws.com',
-        'PORT': '5432'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db_amjuLoans_new.sqlite3'),
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -151,6 +150,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -163,6 +163,7 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -181,15 +182,27 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "static", "media_root")
 
 PROTECTED_ROOT = os.path.join(BASE_DIR, "static", "protected_media")
 
-from amjuLoans.ssl_config import *
+JENKINS_TASKS = (
+    'django_jenkins.tasks.run_pep8',
+    'django_jenkins.tasks.run_pyflakes'
+)
+
 CORS_ORIGIN_ALLOW_ALL = True
+HOST_SCHEME = "http://"
+SECURE_PROXY_SSL_HEADER = None
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+SECURE_HSTS_SECONDS = None
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+SECURE_FRAME_DENY = False
 
 ACCOUNT_NUMBER_START_FROM = 1000000000
 MINIMUM_DEPOSIT_AMOUNT = 500
 MINIMUM_WITHDRAWAL_AMOUNT = 500
 
 from amjuLoans import celery_config
-
+from amjuLoans.ssl_config import *
 DEFAULT_RENDERER_CLASSES = [
     'rest_framework.renderers.JSONRenderer',
 ]
