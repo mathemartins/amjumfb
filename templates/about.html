@@ -1,0 +1,80 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <title>Loans &mdash; Amju</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/css/jquery-ui.css">
+    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/css/owl.theme.default.min.css">
+
+    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/css/jquery.fancybox.min.css">
+
+    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/css/bootstrap-datepicker.css">
+
+    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/fonts/flaticon/font/flaticon.css">
+
+    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/css/aos.css">
+
+    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/css/style.css">
+
+  </head>
+
+<body>
+
+    {% include 'nav/home-nav.html' %}
+
+    <div class="site-section" id="next">
+    </div>
+
+    <!-- about_area_start  -->
+    <div class="about_area plus_padding">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-6">
+                    <div class="about_img wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".3s">
+                        <img src="https://www.cdn.minloans.com.ng/min-homepage/img/about/about.png" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="about_info pl-68">
+                        <div class="section_title wow fadeInUp" data-wow-duration="1.2s" data-wow-delay=".3s">
+                            <h3>We Simplify Lending!</h3>
+                        </div>
+                        <p class="wow fadeInUp" data-wow-duration="1.2s" data-wow-delay=".4s">
+                            Cloud based customisable loan management system for microfinance and lending companies.
+                            Manage loans and savings accounts of your borrowers. View charts and reports.
+                        </p>
+                        <div class="about_list">
+                            <ul>
+                                <li class="wow fadeInRight" data-wow-duration="1s" data-wow-delay=".5s">Loans.</li>
+                                <li class="wow fadeInRight" data-wow-duration="1s" data-wow-delay=".6s">Savings &amp; Expenses</li>
+                                <li class="wow fadeInRight" data-wow-duration="1s" data-wow-delay=".7s">Payroll &amp; Accounting</li>
+                                <li class="wow fadeInRight" data-wow-duration="1s" data-wow-delay=".9s">Integrated Apps &amp; Store</li>
+                            </ul>
+                        </div>
+                        <div class="about_btn wow fadeInRight" data-wow-duration="1.3s" data-wow-delay=".5s">
+                            <a class="boxed-btn3" href="{% url 'login' %}">Give Us A Try, Start Using AMJU UNIQUE MFB</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- about_area_end  -->
+
+    {% include 'base/h_footer.html' %}
+
+</body>
+
+</html>

@@ -1,0 +1,58 @@
+{% load static %}
+
+<script>
+    $(function () {
+        'use strict';
+        $(document).ready(function () {
+            {% if messages %}
+                {% for message in messages %}
+                    $(document).Toasts('create', {
+                        class: {% if message.tags == 'success' %}'bg-success' {% elif message.tags == 'info' %} 'bg-info' {% elif message.tags == 'warning' %} 'bg-warning' {% elif message.tags == 'error' %} 'bg-danger' {% endif %},
+                        title: {% if message.tags == 'success' %}'Success!' {% elif message.tags == 'info' %} 'Signed In As: '{% elif message.tags == 'warning' %} 'Warning' {% elif message.tags == 'error' %} 'Oops! Sorry' {% endif %},
+                        subtitle: 'minloansng',
+                        body: {% if message.tags %}'{{ message }}'{% endif %}
+                    });
+                    const messageVal = "{{ message }}";
+                    console.log(typeof (messageVal));
+                    {% if message == "Account Expired!, Your Account Has Been Expired You Would Be Redirected To The Payment Portal Upgrade Your Payment" %}
+                        setTimeout(function () {
+                            window.location.replace("{% url 'mincore-url:account-upgrade' %}");
+                        }, 3000);
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            // Auto Search
+            let searchForm = $(".search-form");
+            let searchInput = searchForm.find("[name='q']"); // input name='q'
+            let typingTimer;
+            let typingInterval = 500; // .5 seconds
+            let searchBtn = searchForm.find("[type='submit']");
+            searchInput.keyup(function(event){
+              // key released
+              clearTimeout(typingTimer);
+
+              typingTimer = setTimeout(perfomSearch, typingInterval)
+            });
+
+            searchInput.keydown(function(event){
+              // key pressed
+              clearTimeout(typingTimer)
+            });
+
+            function displaySearching(){
+              searchBtn.addClass("disabled");
+              searchBtn.html("<i class='fa fa-spin fa-spinner'></i> Searching...")
+            }
+
+            function perfomSearch(){
+              displaySearching();
+                let query = searchInput.val();
+                setTimeout(function(){
+                window.location.href='/search/{{ object.slug }}/?q=' + query
+              }, 1000)
+
+            }
+        })
+    })
+</script>
