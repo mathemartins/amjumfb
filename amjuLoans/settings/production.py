@@ -26,7 +26,7 @@ SECRET_KEY = '(=vw2)fyh)4uit)gty2z7g-icg$3a^zc3w-eb)v+)@tncxd%))'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-BASE_URL = 'https://www.loans.amjuuniquemfbng.com'
+BASE_URL = 'https://amju.herokuapp.com'
 
 ALLOWED_HOSTS = ['*']
 
@@ -127,10 +127,10 @@ WSGI_APPLICATION = 'amjuLoans.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd7epjljjk3gfm0',
-        'USER': 'sjefusmocigoqw',
-        'PASSWORD': '43845d756c8c04404dc20e947aacd783852725ba7271dd5b641d6d8106dc2f82',
-        'HOST': 'ec2-23-22-156-110.compute-1.amazonaws.com',
+        'NAME': 'db1hh10epfr8b4',
+        'USER': 'sdwmqtmnuzvtjq',
+        'PASSWORD': 'e3c554538e9c370831e8bef391726362206ab1901f4535ec31d63f5b8f54e50f',
+        'HOST': 'ec2-3-214-4-151.compute-1.amazonaws.com',
         'PORT': '5432'
     }
 }
