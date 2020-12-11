@@ -132,5 +132,5 @@ dmypy.json
 .pyre/
 
 # don't track this settings
-minloansng/settings/local.py
+amjuLoans/settings/local.py
 reports
