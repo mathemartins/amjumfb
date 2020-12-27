@@ -3,8 +3,14 @@
   <component name="ChangeListManager">
     <list default="true" id="96bd422c-c9d1-4c6f-acf4-e29dc3a70862" name="Default Changelist" comment="">
       <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/accounts/migrations/0010_auto_20201212_0534.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/accounts/templates/accounts/borrower-profile.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/accounts/templates/accounts/staff-profile-detail.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/borrowers/migrations/0011_borrower_user.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/borrowers/migrations/0012_auto_20201212_0933.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/borrowers/migrations/0013_borrower_imageurl.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/loans/migrations/0016_loanrequests.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/loans/migrations/0017_loanrequests_duration_figure.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/loans/templates/loans/loan-request-list.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
@@ -68,23 +74,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/sidenav/sidebar.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="407">
-              <caret line="240" column="17" lean-forward="true" selection-start-line="240" selection-start-column="17" selection-end-line="240" selection-end-column="17" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/README.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="432">
-                <caret line="56" column="40" selection-start-line="56" selection-start-column="40" selection-end-line="56" selection-end-column="40" />
-              </first_editor>
-              <second_editor />
+            <state relative-caret-position="119">
+              <caret line="240" column="17" selection-start-line="240" selection-start-column="17" selection-end-line="240" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -259,18 +253,17 @@
       <workItem from="1608292204925" duration="49000" />
       <workItem from="1608292536146" duration="10723000" />
       <workItem from="1608703000767" duration="5146000" />
-      <workItem from="1609060216960" duration="1701000" />
+      <workItem from="1609060216960" duration="2580000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="86871000" />
+    <option name="totallyTimeSpent" value="87750000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27609682" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.27609682" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -284,7 +277,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.3289689" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.3289689" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.3289689" />
       <window_info anchor="bottom" id="PyCrunch Timeline" order="13" />
       <window_info anchor="bottom" id="Pylint" order="14" />
@@ -708,20 +701,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/sidenav/sidebar.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="407">
-          <caret line="240" column="17" lean-forward="true" selection-start-line="240" selection-start-column="17" selection-end-line="240" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="432">
-            <caret line="56" column="40" selection-start-line="56" selection-start-column="40" selection-end-line="56" selection-end-column="40" />
+          <first_editor relative-caret-position="256">
+            <caret line="45" lean-forward="true" selection-start-line="45" selection-end-line="45" />
           </first_editor>
           <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/sidenav/sidebar.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="240" column="17" selection-start-line="240" selection-start-column="17" selection-end-line="240" selection-end-column="17" />
         </state>
       </provider>
     </entry>
