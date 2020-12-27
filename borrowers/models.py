@@ -32,9 +32,11 @@ WORKING_STATUS = (
 
 class Borrower(models.Model):
     registered_to = models.ForeignKey(to='company.Company', on_delete=models.CASCADE, blank=True, null=True)
+    user = models.OneToOneField(to='accounts.Profile', on_delete=models.CASCADE, blank=True, null=True)
     first_name = models.CharField(blank=True, null=True, max_length=255)
     last_name = models.CharField(blank=True, null=True, max_length=255)
     photo = CloudinaryField(upload_image_path, null=True, blank=True)
+    imageUrl = models.CharField(blank=True, null=True, max_length=255)
     gender = models.CharField(max_length=20, choices=GENDER, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True, help_text='Block 32, Arizona Street')
     lga = models.CharField(max_length=255, blank=True, null=True)
@@ -48,7 +50,7 @@ class Borrower(models.Model):
     email = models.EmailField(blank=True, null=True)
     unique_identifier = models.CharField(blank=True, null=True, max_length=255,
                                          help_text='Social Security Number, License Or Registration ID')
-    bank = models.ForeignKey(BankCode, on_delete=models.CASCADE)
+    bank = models.ForeignKey(BankCode, on_delete=models.CASCADE, blank=True, null=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
     account_number = models.CharField(blank=True, null=True, max_length=255)
     bvn = models.CharField(blank=True, null=True, max_length=255, help_text='Bank Verification Number')
@@ -78,9 +80,15 @@ class Borrower(models.Model):
 
     @property
     def get_image(self):
-        if self.photo or self.photo == "":
+        if self.imageUrl:
+            return self.imageUrl
+        elif not self.photo:
+            return "https://img.icons8.com/officel/2x/user.png"
+        else:
             return self.photo.url
-        return "https://img.icons8.com/officel/2x/user.png"
+
+
+
 
     def get_age(self):
         if self.date_of_birth:

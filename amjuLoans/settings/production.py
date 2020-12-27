@@ -31,8 +31,7 @@ BASE_URL = 'https://amju.herokuapp.com'
 ALLOWED_HOSTS = ['*']
 
 MANAGERS = (
-    ('AMJU UNIQUE MFB', "minloansnigeria@gmail.com"),
-    ('AMJU UNIQUE MFB', "customer@minloans.com.ng")
+    ('Amju Loans', "amju@amjuuniquemfbng.com")
 )
 
 ADMINS = MANAGERS

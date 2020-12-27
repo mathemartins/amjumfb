@@ -15,9 +15,10 @@
                 <li><a href="/" class="nav-link">Home</a></li>
                 <li><a href="{% url 'features' %}" class="nav-link">Features</a></li>
                 <li><a href="#" class="nav-link">About</a></li>
-                <li><a href="#" class="nav-link">Contact</a></li>
+                <li><a href="#" class="nav-link">Apply For Loan</a></li>
                 {% if request.user.is_authenticated %}
-                    <li><a href="{% url 'account:profile-detail' request.user.profile.slug %}" class="nav-link">{{ request.user.profile.get_name }}</a></li>
+                    <li><a href="{% if request.user.is_staff %}/dashboard/{{request.user.profile.working_for.first.slug}}/{% else %} {% url 'account:profile-detail' request.user.profile.slug %} {% endif %}" class="nav-link">{{ request.user.profile.get_name }}</a></li>
+                    <li><a href="#" class="nav-link">Sign Out</a></li>
                 {% else %}
                     <li><a href="{% url 'register' %}" class="nav-link">Authenticate</a> </li>
                 {% endif %}

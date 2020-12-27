@@ -28,7 +28,7 @@ from company.models import Company, RemitaCredentials, RemitaMandateActivationDa
     RemitaPaymentDetails, RemitaMandateStatusReport
 from loans.forms import CollateralForm, LoanFileForm
 from loans.models import Loan, LoanType, ModeOfRepayments, Penalty, Collateral, LoanTerms, CollateralFiles, \
-    CollateralType, LoanActivityComments
+    CollateralType, LoanActivityComments, LoanRequests
 from mincore.models import BaseUrl
 from amjuLoans.cloudinary_settings import cloudinary_upload_preset, cloudinary_url
 from amjuLoans.minmarket.packages.remita import remita_dd_url, statuscode_success
@@ -135,7 +135,7 @@ class LoanCreateView(LoginRequiredMixin, DetailView):
             slug=loan_slug,
         )
 
-        base_url = getattr(settings, 'BASE_URL', 'https://www.minloans.com.ng')
+        base_url = getattr(settings, 'BASE_URL', 'https://amju.herokuapp.com')
 
         if str(loan_collection_type) == "Remita Direct Debit":
             urlpath = reverse('loans-url:loan-standing-order-create',
@@ -813,3 +813,19 @@ class RemitaDDStatusReport(View):
                 )
             return JsonResponse({'message': 'Transaction Has Been Updated!'}, status=201)
         return JsonResponse({'message': 'Method Not Allowed'}, status=501)
+
+
+class LoanRequestView(LoginRequiredMixin, ListView):
+    template_name = 'loans/loan-request-list.html'
+
+    def get_queryset(self):
+        qs = LoanRequests.objects.filter(borrower=self.request.user.profile.borrower)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super(LoanRequestView, self).get_context_data(**kwargs)
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        print(self.kwargs)
+        return super(LoanRequestView, self).render_to_response(context, **response_kwargs)

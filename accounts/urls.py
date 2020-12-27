@@ -5,11 +5,13 @@ from .views import (
     AccountEmailActivateView,
     UserDetailUpdateView,
     ProfileDetailView,
-    SystemUserProfile
-)
+    SystemUserProfile,
+    RequestBorrowerProfile, ImageUploadReceiver)
 
 urlpatterns = [
+    path('profile/upload/', ImageUploadReceiver.as_view(), name='profile-upload'),
     path('profile/<slug:slug>/', ProfileDetailView.as_view(), name='profile-detail'),
+    path('profile/<slug:slug>/borrower-create/', RequestBorrowerProfile.as_view(), name='request-borrower-create'),
     path('profile/<slug:company_slug>/<slug:slug>/', SystemUserProfile.as_view(), name='company-user-detail'),
     re_path(r'^$', AccountHomeView.as_view(), name='home'),
     re_path(r'^details/$', UserDetailUpdateView.as_view(), name='user-update'),

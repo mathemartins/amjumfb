@@ -8,13 +8,22 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
+from django.utils.text import slugify
 from django.views.generic import CreateView, FormView, DetailView, View, UpdateView, TemplateView
 from django.views.generic.edit import FormMixin
 from django.shortcuts import render, redirect
 from django.utils.safestring import mark_safe
+from django_countries import countries
+from django_countries.fields import Country
 from rest_framework import status
 
+from amjuLoans import email_settings
+from amjuLoans.cloudinary_settings import cloudinary_upload_preset, cloudinary_url
+from amjuLoans.utils import random_string_generator
+from banks.models import BankCode
+from borrowers.models import Borrower
 from company.models import Company
+from loans.models import LoanRequests
 from mincore.models import PlanDetails, SupportTickets
 from amjuLoans.mixins import NextUrlMixin, RequestFormAttachMixin
 from .forms import LoginForm, RegisterForm, GuestForm, ReactivateEmailForm, UserDetailChangeForm, UserUpdateForm
@@ -101,17 +110,14 @@ class LoginView(NextUrlMixin, RequestFormAttachMixin, FormView):
         return redirect(next_path)
 
     def render_to_response(self, context, **response_kwargs):
-        if context:
-            if self.request.user.is_authenticated:
-                profile_obj = Profile.objects.get(user=self.request.user)
-                try:
-                    company_obj = Company.objects.get(user=profile_obj)
-                except Company.MultipleObjectsReturned:
-                    company_qs = Company.objects.filter(user=profile_obj)
-                    company_obj = company_qs.first()
-                return redirect(reverse('company-url:dashboard', kwargs={'slug': company_obj.slug}))
-            else:
-                pass
+        if context and self.request.user.is_authenticated:
+            profile_obj = Profile.objects.get(user=self.request.user)
+            try:
+                company_obj = Company.objects.get(user=profile_obj)
+            except Company.MultipleObjectsReturned:
+                company_qs = Company.objects.filter(user=profile_obj)
+                company_obj = company_qs.first()
+            return redirect(reverse('company-url:dashboard', kwargs={'slug': company_obj.slug}))
         return super(LoginView, self).render_to_response(context, **response_kwargs)
 
 
@@ -169,28 +175,51 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
         context['user_comp_qs'] = self.object.user.profile.company_set.all()
         context['user_plan'] = self.object.user.profile.get_plan_display()  # .plan #get_modelfield_display()
         context['works_for'] = self.object.user.profile.working_for.all()
-        staffs_ = list()
-        for staff_obj in self.object.user.profile.company_set.all():
-            staffs_.append(staff_obj)
+        staffs_ = [staff_obj for staff_obj in self.object.user.profile.company_set.all()]
         context['staff_count'] = (len(staffs_))
+        context['current_borrower'] = Borrower.objects.get(user=self.request.user.profile)
 
         if timezone.now() <= self.object.user.profile.trial_days:
             context["plan_title"] = "ACTIVE"
         else:
             context["plan_title"] = "EXPIRED"
-
         try:
             context['plan_info_obj'] = PlanDetails.objects.get(name__iexact=self.object.user.profile.get_plan_display())
         except:
             context['plan_info_obj'] = "No Fee Plan"
 
-        user_code = list()
-        for code_obj in Profile.objects.all():
-            user_code.append(code_obj.keycode)
-
+        user_code = [code_obj.keycode for code_obj in Profile.objects.all()]
         context["userKeyCode"] = user_code
         context['userTickets_qs'] = SupportTickets.objects.filter(user__exact=self.object)[:10]
         return context
+
+    def post(self, request, *args, **kwargs):
+        print(self.request.POST)
+        thisBorrower = Borrower.objects.get(user=self.request.user.profile)
+        LoanRequests.objects.create(
+            borrower=thisBorrower,
+            amount=self.request.POST.get('amount'),
+            request_status='Still Processing',
+            duration_figure=int(self.request.POST.get('durationFigure')),
+            duration=self.request.POST.get('durationPeriod'),
+            repayment_interval=self.request.POST.get('repaymentInterval'),
+            slug=slugify("{borrower}-{amount}-{primaryKey}".format(
+                borrower=thisBorrower, amount=self.request.POST.get('amount'), primaryKey=random_string_generator(6)
+            ))
+        )
+        # Send an Email Saying Loan Application Was Made By A User
+        html_ = "The User ({loanUser}), just applied for a loan, validate user account and process loan application".format(loanUser=thisBorrower)
+        subject = 'New Loan Application From {loanUser}'.format(loanUser=thisBorrower)
+        from_email = email_settings.EMAIL_HOST_USER
+        recipient_list = [self.request.user.email]
+
+        from django.core.mail import EmailMessage
+        message = EmailMessage(
+            subject, html_, from_email, recipient_list
+        )
+        message.fail_silently = False
+        message.send()
+        return JsonResponse({'message':'Successful'}, status=200)
 
 
 class SystemUserProfile(LoginRequiredMixin, SuccessMessageMixin, DetailView):
@@ -221,3 +250,83 @@ class SystemUserProfile(LoginRequiredMixin, SuccessMessageMixin, DetailView):
             user_form.save()
             return redirect(reverse('account:company-user-detail', kwargs={'company_slug':company_obj.slug, 'slug': self.get_object().slug} ))
         return JsonResponse({'message': 'An error during submission!'})
+
+
+class RequestBorrowerProfile(LoginRequiredMixin, SuccessMessageMixin, DetailView):
+    model = Profile
+    template_name = 'accounts/borrower-profile.html'
+    success_message = "User profile has Been Updated Successfully!"
+
+    def get_context_data(self, **kwargs):
+        context = super(RequestBorrowerProfile, self).get_context_data(**kwargs)
+        try:
+            user_borrower = Borrower.objects.get(user=self.get_object())
+        except Borrower.DoesNotExist:
+            user_borrower = None
+            return user_borrower
+        full_name = str(self.request.user.full_name)
+        first_name = full_name.split()[0]
+        last_name = full_name.split()[1]
+        context['banks'] = BankCode.objects.all()
+        context['country_qs'] = countries
+        context['cloudinary_upload_preset'] = cloudinary_upload_preset
+        context['cloudinary_url'] = cloudinary_url
+        context.update({
+            "first_name": first_name,
+            "last_name": last_name,
+            "borrower": user_borrower
+        })
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        if context:
+            if self.request.user.profile != self.get_object():
+                return reverse('404_')
+            full_name = str(self.request.user.full_name)
+            first_name = full_name.split()[0]
+            last_name = full_name.split()[1]
+
+            Borrower.objects.get_or_create(
+                user=self.get_object(),
+                first_name=first_name,
+                last_name=last_name,
+                email=self.request.user.email,
+                phone=self.request.user.profile.phone
+            )
+        return super(RequestBorrowerProfile, self).render_to_response(context, **response_kwargs)
+
+    def post(self, *args, **kwargs):
+        bank_inst = BankCode.objects.get(name__exact=self.request.POST.get('bank'))
+        country_inst = Country(code=self.request.POST.get('country'))
+        print(country_inst, country_inst.name)
+        borrower_instance = Borrower.objects.get(user=self.get_object())
+        borrower_instance.first_name=self.request.POST.get('firstName')
+        borrower_instance.last_name=self.request.POST.get('lastName')
+        borrower_instance.gender=self.request.POST.get('gender')
+        borrower_instance.address=self.request.POST.get('address')
+        borrower_instance.lga=self.request.POST.get('lga')
+        borrower_instance.state=self.request.POST.get('state')
+        borrower_instance.country=country_inst
+        borrower_instance.title=self.request.POST.get('title')
+        borrower_instance.land_line=self.request.POST.get('landPhone')
+        borrower_instance.business_name=self.request.POST.get('businessName')
+        borrower_instance.working_status=self.request.POST.get('workingStatus')
+        borrower_instance.unique_identifier=self.request.POST.get('unique_identifier')
+        borrower_instance.bank=bank_inst
+        borrower_instance.account_number=self.request.POST.get('accountNumber')
+        borrower_instance.bvn=self.request.POST.get('bvn')
+        borrower_instance.date_of_birth=self.request.POST.get('dateOfBirth')
+        borrower_instance.slug=slugify("{firstName}-{lastName}-{company}-{primaryKey}".format(
+                firstName=self.request.POST.get('firstName'), lastName=self.request.POST.get('lastName'),
+                company=self.get_object(), primaryKey=random_string_generator(4)
+            ))
+        borrower_instance.save()
+        return JsonResponse({'message': 'Account completed successfully!'})
+
+
+class ImageUploadReceiver(View):
+    def post(self, *args, **kwargs):
+        instance = Borrower.objects.get(user=self.request.user.profile)
+        instance.imageUrl = self.request.POST.get("imageUrl")
+        instance.save()
+        return JsonResponse({'message': 'Profile Image Updated successfully!'})

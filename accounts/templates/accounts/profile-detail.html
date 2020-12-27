@@ -1,7 +1,7 @@
 {% load static %}
 {% load widget_tweaks %}
 
-<!doctype html>
+<!Doctype html>
 <html class="no-js" lang="zxx">
 
 <head>
@@ -11,6 +11,7 @@
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
     <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/fonts/icomoon/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/89122a8218.css">
 
     <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/css/jquery-ui.css">
@@ -35,194 +36,274 @@
     {% include 'nav/home-nav.html' %}
 
     <div class="site-section" id="next">
-    </div>
-
-    <!--================Blog Area =================-->
-   <section class="blog_area single-post-area section-padding">
       <div class="container">
-         <div class="row">
-            <div class="col-sm-4 col-sm-offset-4">
-               <div class="blog_right_sidebar">
-                  <aside class="single_sidebar_widget post_category_widget">
-                     <h4 class="widget_title">
-                         {% if user_comp_qs.count == 1 %}
-                             My Company
-                         {% elif user_comp_qs.count >= 2 %}
-                             My Companies
-                         {% else %}
-                             My Company
-                         {% endif %}
-                     </h4>
-                     <ul class="list cat-list">
-                        {% for comp in user_comp_qs %}
-                            {% if comp.name %}
-                                <li>
-                                   <a href="{{ comp.get_absolute_url }}" class="d-flex">
-                                      <p>
-                                          <img src="https://cdn.minloans.com.ng/svgs/company.svg" width="40px" height="40px" class="img-responsive" />
-                                          {{ comp }}
-                                      </p>
-                                   </a>
-                                </li>
-                            {% else %}
-                                <a href="{% url 'company-url:update-company-profile' comp.slug %}" class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn">
-                                    Get A Company
-                                </a>
-                            {% endif %}
-                        {% endfor %}
-                     </ul>
-                  </aside>
-                  <aside class="single_sidebar_widget post_category_widget">
-                     <h4 class="widget_title">
-                         I Work For:
-                     </h4>
-                     <ul class="list cat-list">
-                        {% for comp in works_for %}
-                            {% if comp.name %}
-                                <li>
-                                   <a href="{{ comp.get_absolute_url }}" class="d-flex">
-                                      <p>
-                                          <img src="https://cdn.minloans.com.ng/svgs/company.svg" width="40px" height="40px" class="img-responsive" />
-                                          {{ comp }}
-                                      </p>
-                                   </a>
-                                </li>
-                            {% endif %}
-                        {% empty %}
-                            <li><p><strong>Not An Employee</strong></p></li>
-                        {% endfor %}
-                     </ul>
-                  </aside>
-                  <aside class="single_sidebar_widget popular_post_widget">
-                     <h3 class="widget_title">
-                         <img class="img-responsive" width="40px" height="40px" src="https://cdn.minloans.com.ng/svgs/key.svg" />
-                         Access Token
-                     </h3>
-                     <div class="media post_item">
-                        <small><em>{{ object.token }}</em></small>
-                     </div><hr/>
-                     <div class="media post_item">
-                         <strong>KeyCode: </strong><small><em>{{ object.keycode }}</em></small>
-                     </div>
-                  </aside>
-                  <aside class="single_sidebar_widget tag_cloud_widget">
-                     <h4 class="widget_title">
-                         <img src="https://cdn.minloans.com.ng/svgs/credit-card.svg" class="img-responsive" width="40px" height="40px"/>
-                         Current Plan
-                     </h4>
-                     <div class="well well-sm">
-                         {{ plan_title }}: <strong>{{ user_plan }}</strong>
-                         {% if plan_title == 'ACTIVE' %} <i class="fa fa-check"></i> {% else %} <i class="fa fa-times"></i> {% endif %}
-                         <hr/> <small> {% if plan_title == 'ACTIVE' %} Expires in <strong>{{ object.trial_days }}</strong> {% else %} Expired {% endif %} </small>
-                         {% if user_plan == 'FREEMIUM' %}
-                             <hr/>
-                             <a href="#" style="color: #efefef" class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn">
-                                 Upgrade Account
-                             </a>
-                         {% endif %}
-                     </div>
-                  </aside>
-               </div>
-            </div>
-         </div>
-      </div>
-   </section>
-   <!--================ Blog Area end =================-->
+        <h3 class="text-center text-capitalize">Hi, {{ request.user.profile.get_name }}</h3><hr/><br/>
+        <div class="row mb-5">
+          <div class="col-md-4 text-center" data-aos="fade-up" data-aos-delay="">
+            <img src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/images/flaticon-svg/svg/001-wallet.svg" alt="Free Website Template by Free-Template.co" class="img-fluid w-25 mb-4">
+            <h4 class="card-title">
+                <a href="/account/profile/{{request.user.profile.slug}}/borrower-create/" class="btn btn-primary"><i class="fa fa-user"></i> Profile &amp; Account </a>
+            </h4>
+          </div>
+          <div class="col-md-4 text-center" data-aos="fade-up" data-aos-delay="100">
+            <img src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/images/flaticon-svg/svg/004-cart.svg" alt="Free Website Template by Free-Template.co" class="img-fluid w-25 mb-4">
+            <h4 class="card-title">
+                <a href="{% url 'loans-url:loan-request-list' request.user.profile.slug %}" class="btn btn-primary">
+                    Applied Loans
+                </a>
+            </h4>
+          </div>
+          <div class="col-md-4 text-center" data-aos="fade-up" data-aos-delay="200">
+            <img src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/images/flaticon-svg/svg/006-credit-card.svg" alt="Free Website Template by Free-Template.co" class="img-fluid w-25 mb-4">
+            <h4 class="card-title">
+                <a href="https://amjuuniquemfbng.com" target="_blank" class="btn btn-primary">
+                    Bank With Amju
+                </a>
+            </h4>
+          </div>
 
+        </div>
+
+        <hr/><br/>
+
+        <div class="row">
+          <div class="col-lg-6 mb-5" data-aos="fade-up" data-aos-delay="">
+            {% if request.user.full_name and request.user.profile.phone %}
+
+              <h3>How we handle loan application</h3>
+              <div class="jumbotron">
+
+                  <ul>
+                      <li>Apply For Dashboard</li>
+                      <li>Validate User Account Information</li>
+                      <li>Activate Mandate Debit License</li>
+                      <li>Disburse Fund To Registered &amp; Validated Account</li>
+                  </ul>
+
+              </div>
+
+            {% endif %}
+          </div>
+          <div class="col-lg-5 ml-auto" data-aos="fade-up" data-aos-delay="100">
+            <div class="mb-4">
+              <h3 class="h3 mb-4 text-black">Apply For Loan</h3>
+              <p class="credit-worthiness-analysis">Amortization Loan Powered Computation</p>
+                {% if request.user.full_name and request.user.profile.phone %}
+                    {% if request.user.profile.borrower.bank %}
+                        <div class="jumbotron" id="jumboMessage">
+                            You are eligible for loan application <i class="fa fa-check-circle" style="color: #5cb85c"></i>
+                        </div>
+                    {% else %}
+                        <i class="fa fa-exclamation-circle" style="color: #ba2121"></i> Cannot Apply
+                    {% endif %}
+                {% else %}
+                    <a href="" class="btn btn-info">
+                        <i class="fa fa-user"></i>
+                        Complete Your Profile <i class="fa fa-arrow-right"></i>
+                    </a>
+                {% endif %}
+            </div>
+
+            <div class="mb-4">
+                {% if request.user.full_name and request.user.profile.phone %}
+                    <div class="row" id="analysisResult" hidden>
+                      <br/>
+                      <div class="col-sm-6">
+                          <div class="card" style="">
+                              <div class="card-body">
+                                <h5 class="card-title" id="suggestedAmountOne">₦ 15,000</h5>
+                                <p class="card-text">
+                                    rate: 5 % monthly<br/>
+                                    rate: 3 % weekly<br/>
+                                    rate: 1.5 % Daily<br/>
+                                </p>
+                                <button href="#" class="btn btn-primary btn-block" id="firstButtonApply">Apply</button>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-6">
+                          <div class="card" style="">
+                              <div class="card-body">
+                                <h5 class="card-title" id="suggestedAmountTwo">₦ 34,000</h5>
+                                <p class="card-text">
+                                    rate: 5 % monthly<br/>
+                                    rate: 3 % weekly<br/>
+                                    rate: 1.5 % Daily<br/>
+                                </p>
+                                <a href="#" class="btn btn-primary btn-block" id="secondButtonApply">Apply</a>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-4" id="completeLoanRequest" hidden>
+                <form class="loanFinalizationForm" action="{% url 'account:profile-detail' request.user.profile.slug %}" method="post">
+                    <div class="form-group d-flex align-items-center">
+                        <label>Select Loan Duration</label>
+                    </div>
+                    <div class="form-group d-flex align-items-center">
+                      <input type="number" id="durationFigure" class="form-control mr-2" required>
+                      <select class="form-control mr-2" id="loanDuration" required>
+                        <option value="Years">Years</option>
+                        <option value="Months">Months</option>
+                        <option value="Weeks">Weeks</option>
+                        <option value="Days">Days</option>
+                      </select>
+                    </div>
+                    <div class="form-group d-flex align-items-center">
+                        <label>Select Repayment Interval</label>
+                    </div>
+                    <div class="form-group d-flex align-items-center">
+                      <select class="form-control mr-2" id="repaymentInterval" required>
+                        <option value="Yearly">Yearly</option>
+                        <option value="Monthly">Monthly</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Daily">Daily</option>
+                      </select>
+                    </div>
+                    <div class="form-group d-flex align-items-center">
+                        <button type="submit" class="btn btn-primary btn-block" id="completeLoanApplication">
+                            Apply
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="mb-4" id="applyForm">
+              <form action="#">
+                <div class="form-group d-flex align-items-center">
+                  <input type="number" id="customLoanAmount" class="form-control mr-2">
+                    <button type="submit" class="btn btn-primary" id="customLoanApplication" disabled>
+                        Apply
+                    </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     {% include 'footer/home-footer.html' %}
 
-    <script src="https://cdn.minloans.com.ng/min-homepage/js/vendor/modernizr-3.5.0.min.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/vendor/jquery-1.12.4.min.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/popper.min.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/bootstrap.min.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/owl.carousel.min.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/isotope.pkgd.min.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/ajax-form.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/waypoints.min.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/jquery.counterup.min.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/imagesloaded.pkgd.min.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/scrollIt.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/jquery.scrollUp.min.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/wow.min.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/nice-select.min.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/jquery.slicknav.min.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/jquery.magnific-popup.min.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/plugins.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/gijgo.min.js"></script>
+    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/jquery-3.3.1.min.js"></script>
+    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/jquery-ui.js"></script>
+    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/popper.min.js"></script>
+    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/bootstrap.min.js"></script>
+    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/owl.carousel.min.js"></script>
+    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/jquery.countdown.min.js"></script>
+    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/jquery.easing.1.3.js"></script>
+    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/aos.js"></script>
+    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/jquery.fancybox.min.js"></script>
+    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/jquery.sticky.js"></script>
+    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/isotope.pkgd.min.js"></script>
+    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/main.js"></script>
 
-   <!--contact js-->
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/contact.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/jquery.ajaxchimp.min.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/jquery.form.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/jquery.validate.min.js"></script>
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/mail-script.js"></script>
-
-   <script src="https://cdn.minloans.com.ng/min-homepage/js/main.js"></script>
-
-   {% include 'js/dashjs.html' %}
-
-   <script>
-       $(function () {
+    <script>
+        $(function () {
             'use strict';
             $(document).ready(function () {
-                const addStaffForm = $('.addStaffForm');
-                const addStaffFormMethod = addStaffForm.attr('method');
-                const addStaffFormEndpoint = addStaffForm.attr('action');
-                const addStaffFormSubmitBtn = addStaffForm.find("[type='submit']");
-                const addStaffFormSubmitBtnText = addStaffFormSubmitBtn.text();
+                let loanApplicationButton = $("#customLoanApplication");
+                {% if request.user.full_name and request.user.profile.phone %}
+                    loanApplicationButton.prop("disabled", false);
+                {% endif %}
 
-                function displaySubmitting(submitBtn, defaultText, doSubmit) {
-                    if (doSubmit) {
-                        submitBtn.addClass("disabled");
-                        submitBtn.html("<i class='fa fa-spin fa-spinner'></i> Adding Staff ...");
+                function handleClick(clickedBtn, defaultText, doClick) {
+                    if (doClick) {
+                        clickedBtn.prop("disabled", true);
+                        clickedBtn.html("<i class='fa fa-spin fa-spinner'></i> Checking User Credibility Status..");
                     } else {
-                        submitBtn.removeClass("disabled");
-                        submitBtn.add(defaultText);
+                        clickedBtn.prop("disabled", false);
+                        clickedBtn.removeClass("disabled");
+                        clickedBtn.add(defaultText);
                     }
                 }
 
-                addStaffForm.submit(function (event) {
+                function randomTime(){
+                    return Math.floor((Math.random() * 15000) + 9000);
+                }
+
+                function getRandomInt(min, max) {
+                  // The maximum is exclusive and the minimum is inclusive
+                  min = Math.ceil(min);
+                  max = Math.floor(max);
+                  return Math.floor(Math.random() * (max - min) + min);
+                }
+
+                loanApplicationButton.on('click', event=>{
                     event.preventDefault();
+                    handleClick(loanApplicationButton, "", true);
+                    let appliedLoanAmount = $("#customLoanAmount").val();
+                    appliedLoanAmount = parseInt(appliedLoanAmount);
+                    let randomfig = getRandomInt(1000, appliedLoanAmount);
+                    let firstAmount = appliedLoanAmount - randomfig;
+                    let secondAmount = getRandomInt(firstAmount, appliedLoanAmount);
+                    $("#suggestedAmountOne").html('₦ ' + firstAmount);
+                    $("#suggestedAmountTwo").html('₦ ' + secondAmount);
+                    setTimeout(function() {
+                        $('#analysisResult').prop("hidden", false);
+                        $('#jumboMessage').html('' +
+                            'Here is what we can give you <i class="fa fa-exclamation-circle" style="color: #eea236"></i> ' +
+                            'Chat with a live agent if you feel you deserve more!');
+                        $('#applyForm').remove('div');
+                    }, randomTime());
+                });
 
-                    {% include 'csrf_ajax/csrf_ajax_token.js' %}
+                $('#firstButtonApply').on('click', ()=>{
+                    $('#completeLoanRequest').prop("hidden", false);
+                    let amount = $('#suggestedAmountOne').text();
+                    let finalAmount = amount.match(/\d/g);
+                    finalAmount = finalAmount.join("");
+                    console.log(finalAmount);
 
-                    const addStaffFormData = {
-                        "message": $('#message').val(),
-                        "staffCode": $('.single-input').val(),
-                        "company": $('#company').val(),
-                    };
-                    console.log(addStaffFormData);
-                    const thisForm = $(this);
+                    let loanApplicationFirstButton = $('#completeLoanApplication');
+                    const loanApplicationForm = $('.loanFinalizationForm');
+                    const loanApplicationFormMethod = loanApplicationForm.attr('method');
+                    const loanApplicationFormEndpoint = loanApplicationForm.attr('action');
 
-                    displaySubmitting(addStaffFormSubmitBtn, "", true);
 
-                    $.ajax({
-                        method: addStaffFormMethod,
-                        url: addStaffFormEndpoint,
-                        data: addStaffFormData,
-                        contentType: 'application/x-www-form-urlencoded',
-                        dataType: 'json',
+                    loanApplicationFirstButton.on('click', function (event) {
+                        event.preventDefault();
 
-                        success: function (data) {
-                            addStaffForm[0].reset();
-                            setTimeout(function () {
-                                window.location.replace("{% url 'success' %}");
-                            }, 3000);
-                        }, error: function (error) {
-                            console.log(error);
-                            addStaffForm[0].reset();
-                            //alert would be here
-                            displaySubmitting(addStaffFormSubmitBtn, addStaffFormSubmitBtnText, false);
-                        }
+                        {% include 'csrf_ajax/csrf_ajax_token.js' %}
+
+                        const loanFormData = {
+                            "borrower":'{{current_borrower.user}}',
+                            "amount":''+finalAmount,
+                            "durationFigure":$('#durationFigure').val(),
+                            "durationPeriod":$('#loanDuration').val(),
+                            "repaymentInterval":$('#repaymentInterval').val()
+                        };
+
+                        console.log(loanFormData);
+
+                        handleClick(loanApplicationFirstButton, "", true);
+
+                        $.ajax({
+                            method: loanApplicationFormMethod,
+                            url: loanApplicationFormEndpoint,
+                            data: loanFormData,
+                            contentType: 'application/x-www-form-urlencoded',
+
+                            success: function (data) {
+                                loanApplicationForm[0].reset();
+                                console.log(data);
+                                alert("Loan Application Successful!");
+                                setTimeout(function () {
+                                    window.location.replace('/my-loan-applications/');
+                                }, 3000)
+                            }, error: function (error) {
+                                loanApplicationForm[0].reset();
+                                alert("Error")
+                            }
+                        })
                     })
-
-                })
-            })
-        })
-   </script>
-
-   {% include 'js/support.html' %}
+                });
+            });
+        }, jQuery)
+    </script>
 
 </body>
 

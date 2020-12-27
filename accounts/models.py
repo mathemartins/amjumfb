@@ -271,7 +271,7 @@ class Profile(models.Model):
     phone = PhoneNumberField(blank=True, null=True)
     image = CloudinaryField(upload_image_path, null=True, blank=True)
     keycode = models.CharField(max_length=10, blank=True, null=True, unique=True)
-    working_for = models.ManyToManyField(to='company.Company')
+    working_for = models.ManyToManyField(to='company.Company', blank=True, null=True)
     is_premium = models.BooleanField(default=False)
     trial_days = models.DateTimeField(default=get_trial_days)
     token = models.CharField(max_length=300, blank=True, null=True)
