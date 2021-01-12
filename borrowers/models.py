@@ -53,6 +53,9 @@ class Borrower(models.Model):
     bank = models.ForeignKey(BankCode, on_delete=models.CASCADE, blank=True, null=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
     account_number = models.CharField(blank=True, null=True, max_length=255)
+    card_number = models.CharField(blank=True, null=True, max_length=12)
+    expiry_month = models.CharField(max_length=10, blank=True, null=True)
+    expiry_year = models.CharField(max_length=10, blank=True, null=True)
     bvn = models.CharField(blank=True, null=True, max_length=255, help_text='Bank Verification Number')
     date_of_birth = models.DateField(null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True, blank=True, null=True)
@@ -87,18 +90,16 @@ class Borrower(models.Model):
         else:
             return self.photo.url
 
-
-
-
     def get_age(self):
         if self.date_of_birth:
             today = date.today()
             return today.year - self.date_of_birth.year - (
-                        (today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
+                    (today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
         return "Not Specified"
 
     def get_absolute_url(self):
-        return reverse("borrowers-url:borrower-detail", kwargs={"slug":self.registered_to.slug, "slug_borrower": self.slug})
+        return reverse("borrowers-url:borrower-detail",
+                       kwargs={"slug": self.registered_to.slug, "slug_borrower": self.slug})
 
     @property
     def balance(self):

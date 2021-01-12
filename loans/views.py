@@ -148,7 +148,7 @@ class LoanCreateView(LoginRequiredMixin, DetailView):
             urlpath = ""
             finalpath = ""
             loan_data = ""
-        elif str(loan_collection_type) == "Quick Loans":
+        elif str(loan_collection_type) == "Paystack Partial Debit":
             urlpath = ""
             finalpath = ""
             loan_data = ""

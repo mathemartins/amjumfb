@@ -88,7 +88,7 @@
             <div class="mb-4">
               <h3 class="h3 mb-4 text-black">Apply For Loan</h3>
               <p class="credit-worthiness-analysis">Amortization Loan Powered Computation</p>
-                {% if request.user.full_name and request.user.profile.phone %}
+                {% if request.user.full_name and request.user.profile.phone and request.user.profile.image %}
                     {% if request.user.profile.borrower.bank %}
                         <div class="jumbotron" id="jumboMessage">
                             You are eligible for loan application <i class="fa fa-check-circle" style="color: #5cb85c"></i>
