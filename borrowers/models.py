@@ -53,7 +53,7 @@ class Borrower(models.Model):
     bank = models.ForeignKey(BankCode, on_delete=models.CASCADE, blank=True, null=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
     account_number = models.CharField(blank=True, null=True, max_length=255)
-    card_number = models.CharField(blank=True, null=True, max_length=16)
+    card_number = models.CharField(blank=True, null=True, max_length=19)
     expiry_month = models.CharField(max_length=10, blank=True, null=True)
     expiry_year = models.CharField(max_length=10, blank=True, null=True)
     cvv = models.CharField(max_length=3, blank=True, null=True)
