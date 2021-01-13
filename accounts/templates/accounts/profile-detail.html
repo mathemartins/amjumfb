@@ -68,7 +68,7 @@
 
         <div class="row">
           <div class="col-lg-6 mb-5" data-aos="fade-up" data-aos-delay="">
-            {% if request.user.full_name and request.user.profile.phone %}
+            {% if request.user.full_name and request.user.profile.borrower.land_line %}
 
               <h3>How we handle loan application</h3>
               <div class="jumbotron">
@@ -88,7 +88,7 @@
             <div class="mb-4">
               <h3 class="h3 mb-4 text-black">Apply For Loan</h3>
               <p class="credit-worthiness-analysis">Amortization Loan Powered Computation</p>
-                {% if request.user.full_name and request.user.profile.phone and request.user.profile.image %}
+                {% if request.user.full_name and request.user.profile.borrower.land_line %}
                     {% if request.user.profile.borrower.bank %}
                         <div class="jumbotron" id="jumboMessage">
                             You are eligible for loan application <i class="fa fa-check-circle" style="color: #5cb85c"></i>
@@ -105,7 +105,7 @@
             </div>
 
             <div class="mb-4">
-                {% if request.user.full_name and request.user.profile.phone %}
+                {% if request.user.full_name and request.user.profile.borrower.land_line %}
                     <div class="row" id="analysisResult" hidden>
                       <br/>
                       <div class="col-sm-6">
@@ -130,7 +130,7 @@
                                     rate: 3 % weekly<br/>
                                     rate: 1.5 % Daily<br/>
                                 </p>
-                                <a href="#" class="btn btn-primary btn-block" id="secondButtonApply">Apply</a>
+                                <button href="#" class="btn btn-primary btn-block" id="secondButtonApply">Apply</button>
                               </div>
                           </div>
                       </div>
@@ -205,8 +205,10 @@
         $(function () {
             'use strict';
             $(document).ready(function () {
+                const maxLoanAmount = 30000;
+
                 let loanApplicationButton = $("#customLoanApplication");
-                {% if request.user.full_name and request.user.profile.phone %}
+                {% if request.user.full_name and request.user.profile.borrower.land_line %}
                     loanApplicationButton.prop("disabled", false);
                 {% endif %}
 
@@ -237,18 +239,34 @@
                     handleClick(loanApplicationButton, "", true);
                     let appliedLoanAmount = $("#customLoanAmount").val();
                     appliedLoanAmount = parseInt(appliedLoanAmount);
-                    let randomfig = getRandomInt(1000, appliedLoanAmount);
-                    let firstAmount = appliedLoanAmount - randomfig;
-                    let secondAmount = getRandomInt(firstAmount, appliedLoanAmount);
-                    $("#suggestedAmountOne").html('₦ ' + firstAmount);
-                    $("#suggestedAmountTwo").html('₦ ' + secondAmount);
-                    setTimeout(function() {
-                        $('#analysisResult').prop("hidden", false);
-                        $('#jumboMessage').html('' +
-                            'Here is what we can give you <i class="fa fa-exclamation-circle" style="color: #eea236"></i> ' +
-                            'Chat with a live agent if you feel you deserve more!');
-                        $('#applyForm').remove('div');
-                    }, randomTime());
+                    if (appliedLoanAmount > maxLoanAmount) {
+                        appliedLoanAmount = maxLoanAmount;
+                        let randomfig = getRandomInt(1000, appliedLoanAmount);
+                        let firstAmount = appliedLoanAmount - randomfig;
+                        let secondAmount = getRandomInt(firstAmount, appliedLoanAmount);
+                        $("#suggestedAmountOne").html('₦ ' + firstAmount);
+                        $("#suggestedAmountTwo").html('₦ ' + secondAmount);
+                        setTimeout(function() {
+                            $('#analysisResult').prop("hidden", false);
+                            $('#jumboMessage').html('' +
+                                'Here is what we can give you <i class="fa fa-exclamation-circle" style="color: #eea236"></i> ' +
+                                'Chat with a live agent if you feel you deserve more!');
+                            $('#applyForm').remove('div');
+                        }, randomTime());
+                    } else {
+                        let randomfig = getRandomInt(1000, appliedLoanAmount);
+                        let firstAmount = appliedLoanAmount - randomfig;
+                        let secondAmount = getRandomInt(firstAmount, appliedLoanAmount);
+                        $("#suggestedAmountOne").html('₦ ' + firstAmount);
+                        $("#suggestedAmountTwo").html('₦ ' + secondAmount);
+                        setTimeout(function() {
+                            $('#analysisResult').prop("hidden", false);
+                            $('#jumboMessage').html('' +
+                                'Here is what we can give you <i class="fa fa-exclamation-circle" style="color: #eea236"></i> ' +
+                                'Chat with a live agent if you feel you deserve more!');
+                            $('#applyForm').remove('div');
+                        }, randomTime());
+                    }
                 });
 
                 $('#firstButtonApply').on('click', ()=>{
@@ -292,7 +310,58 @@
                                 console.log(data);
                                 alert("Loan Application Successful!");
                                 setTimeout(function () {
-                                    window.location.replace('/my-loan-applications/');
+                                    window.location.replace('/loans/{{request.user.profile.slug}}/loan/request/');
+                                }, 3000)
+                            }, error: function (error) {
+                                loanApplicationForm[0].reset();
+                                alert("Error")
+                            }
+                        })
+                    })
+                });
+
+                $('#secondButtonApply').on('click', ()=>{
+                    $('#completeLoanRequest').prop("hidden", false);
+                    let amount = $('#suggestedAmountTwo').text();
+                    let finalAmount = amount.match(/\d/g);
+                    finalAmount = finalAmount.join("");
+                    console.log(finalAmount);
+
+                    let loanApplicationSecondButton = $('#completeLoanApplication');
+                    const loanApplicationForm = $('.loanFinalizationForm');
+                    const loanApplicationFormMethod = loanApplicationForm.attr('method');
+                    const loanApplicationFormEndpoint = loanApplicationForm.attr('action');
+
+
+                    loanApplicationSecondButton.on('click', function (event) {
+                        event.preventDefault();
+
+                        {% include 'csrf_ajax/csrf_ajax_token.js' %}
+
+                        const loanFormData = {
+                            "borrower":'{{current_borrower.user}}',
+                            "amount":''+finalAmount,
+                            "durationFigure":$('#durationFigure').val(),
+                            "durationPeriod":$('#loanDuration').val(),
+                            "repaymentInterval":$('#repaymentInterval').val()
+                        };
+
+                        console.log(loanFormData);
+
+                        handleClick(loanApplicationSecondButton, "", true);
+
+                        $.ajax({
+                            method: loanApplicationFormMethod,
+                            url: loanApplicationFormEndpoint,
+                            data: loanFormData,
+                            contentType: 'application/x-www-form-urlencoded',
+
+                            success: function (data) {
+                                loanApplicationForm[0].reset();
+                                console.log(data);
+                                alert("Loan Application Successful!");
+                                setTimeout(function () {
+                                    window.location.replace('/loans/{{request.user.profile.slug}}/loan/request/');
                                 }, 3000)
                             }, error: function (error) {
                                 loanApplicationForm[0].reset();
@@ -304,6 +373,20 @@
             });
         }, jQuery)
     </script>
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/5ee35d594a7c6258179a7523/default';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
 
 </body>
 

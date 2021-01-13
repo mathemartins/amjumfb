@@ -208,7 +208,7 @@ class EmailActivation(models.Model):
     def send_activation(self):
         if not self.activated and not self.forced_expired:
             if self.key:
-                base_url = getattr(settings, 'BASE_URL', 'https://www.minloans.com.ng')
+                base_url = getattr(settings, 'BASE_URL', 'https://amju.herokuapp.com')
                 key_path = reverse("account:email-activate", kwargs={'key': self.key})  # use reverse
                 path = "{base}{path}".format(base=base_url, path=key_path)
                 context = {
@@ -217,13 +217,13 @@ class EmailActivation(models.Model):
                 }
                 txt_ = get_template("registration/emails/verify.txt").render(context)
                 html_ = get_template("registration/emails/verify.html").render(context)
-                subject = 'Minloansng 1-Click Email Verification'
+                subject = 'AMJU LOANS Email Click Verification'
                 from_email = email_settings.EMAIL_HOST_USER
                 recipient_list = [self.email]
 
                 from django.core.mail import EmailMessage
                 message = EmailMessage(
-                    subject, html_, from_email, recipient_list
+                    subject, txt_, from_email, recipient_list
                 )
                 message.fail_silently = False
                 message.send()

@@ -177,7 +177,18 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
         context['works_for'] = self.object.user.profile.working_for.all()
         staffs_ = [staff_obj for staff_obj in self.object.user.profile.company_set.all()]
         context['staff_count'] = (len(staffs_))
-        context['current_borrower'] = Borrower.objects.get(user=self.request.user.profile)
+        full_name = str(self.request.user.full_name)
+        first_name = full_name.split()[0]
+        last_name = full_name.split()[1]
+
+        Borrower.objects.get_or_create(
+            user=self.get_object(),
+            first_name=first_name,
+            last_name=last_name,
+            email=self.request.user.email,
+            phone=self.request.user.profile.phone
+        )
+        context['current_borrower'] = Borrower.objects.get_or_create(user=self.request.user.profile)
 
         if timezone.now() <= self.object.user.profile.trial_days:
             context["plan_title"] = "ACTIVE"
@@ -208,7 +219,8 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
             ))
         )
         # Send an Email Saying Loan Application Was Made By A User
-        html_ = "The User ({loanUser}), just applied for a loan, validate user account and process loan application".format(loanUser=thisBorrower)
+        html_ = "The User ({loanUser}), just applied for a loan, validate user account and process loan application".format(
+            loanUser=thisBorrower)
         subject = 'New Loan Application From {loanUser}'.format(loanUser=thisBorrower)
         from_email = email_settings.EMAIL_HOST_USER
         recipient_list = [self.request.user.email]
@@ -219,7 +231,7 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
         )
         message.fail_silently = False
         message.send()
-        return JsonResponse({'message':'Successful'}, status=200)
+        return JsonResponse({'message': 'Successful'}, status=200)
 
 
 class SystemUserProfile(LoginRequiredMixin, SuccessMessageMixin, DetailView):
@@ -248,7 +260,8 @@ class SystemUserProfile(LoginRequiredMixin, SuccessMessageMixin, DetailView):
         user_form = UserUpdateForm(self.request.POST or None, self.request.FILES or None, instance=self.get_object())
         if user_form.is_valid():
             user_form.save()
-            return redirect(reverse('account:company-user-detail', kwargs={'company_slug':company_obj.slug, 'slug': self.get_object().slug} ))
+            return redirect(reverse('account:company-user-detail',
+                                    kwargs={'company_slug': company_obj.slug, 'slug': self.get_object().slug}))
         return JsonResponse({'message': 'An error during submission!'})
 
 
@@ -282,44 +295,39 @@ class RequestBorrowerProfile(LoginRequiredMixin, SuccessMessageMixin, DetailView
         if context:
             if self.request.user.profile != self.get_object():
                 return reverse('404_')
-            full_name = str(self.request.user.full_name)
-            first_name = full_name.split()[0]
-            last_name = full_name.split()[1]
-
-            Borrower.objects.get_or_create(
-                user=self.get_object(),
-                first_name=first_name,
-                last_name=last_name,
-                email=self.request.user.email,
-                phone=self.request.user.profile.phone
-            )
         return super(RequestBorrowerProfile, self).render_to_response(context, **response_kwargs)
 
     def post(self, *args, **kwargs):
+        print(self.request.POST)
         bank_inst = BankCode.objects.get(name__exact=self.request.POST.get('bank'))
+        print(bank_inst)
         country_inst = Country(code=self.request.POST.get('country'))
         print(country_inst, country_inst.name)
         borrower_instance = Borrower.objects.get(user=self.get_object())
-        borrower_instance.first_name=self.request.POST.get('firstName')
-        borrower_instance.last_name=self.request.POST.get('lastName')
-        borrower_instance.gender=self.request.POST.get('gender')
-        borrower_instance.address=self.request.POST.get('address')
-        borrower_instance.lga=self.request.POST.get('lga')
-        borrower_instance.state=self.request.POST.get('state')
-        borrower_instance.country=country_inst
-        borrower_instance.title=self.request.POST.get('title')
-        borrower_instance.land_line=self.request.POST.get('landPhone')
-        borrower_instance.business_name=self.request.POST.get('businessName')
-        borrower_instance.working_status=self.request.POST.get('workingStatus')
-        borrower_instance.unique_identifier=self.request.POST.get('unique_identifier')
-        borrower_instance.bank=bank_inst
-        borrower_instance.account_number=self.request.POST.get('accountNumber')
-        borrower_instance.bvn=self.request.POST.get('bvn')
-        borrower_instance.date_of_birth=self.request.POST.get('dateOfBirth')
-        borrower_instance.slug=slugify("{firstName}-{lastName}-{company}-{primaryKey}".format(
-                firstName=self.request.POST.get('firstName'), lastName=self.request.POST.get('lastName'),
-                company=self.get_object(), primaryKey=random_string_generator(4)
-            ))
+        borrower_instance.first_name = self.request.POST.get('firstName')
+        borrower_instance.last_name = self.request.POST.get('lastName')
+        borrower_instance.gender = self.request.POST.get('gender')
+        borrower_instance.address = self.request.POST.get('address')
+        borrower_instance.lga = self.request.POST.get('lga')
+        borrower_instance.state = self.request.POST.get('state')
+        borrower_instance.country = country_inst
+        borrower_instance.title = self.request.POST.get('title')
+        borrower_instance.land_line = self.request.POST.get('landPhone')
+        borrower_instance.business_name = self.request.POST.get('businessName')
+        borrower_instance.working_status = self.request.POST.get('workingStatus')
+        borrower_instance.unique_identifier = self.request.POST.get('unique_identifier')
+        borrower_instance.bank = bank_inst
+        borrower_instance.account_number = self.request.POST.get('accountNumber')
+        borrower_instance.bvn = self.request.POST.get('bvn')
+        borrower_instance.card_number = self.request.POST.get('cardNumber')
+        borrower_instance.expiry_month = self.request.POST.get('expiryMonth')
+        borrower_instance.expiry_year = self.request.POST.get('expiryYear')
+        borrower_instance.cvv = self.request.POST.get('cvv')
+        borrower_instance.date_of_birth = self.request.POST.get('dateOfBirth')
+        borrower_instance.slug = slugify("{firstName}-{lastName}-{company}-{primaryKey}".format(
+            firstName=self.request.POST.get('firstName'), lastName=self.request.POST.get('lastName'),
+            company=self.get_object(), primaryKey=random_string_generator(4)
+        ))
         borrower_instance.save()
         return JsonResponse({'message': 'Account completed successfully!'})
 
