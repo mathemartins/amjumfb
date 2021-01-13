@@ -171,6 +171,7 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
     template_name = 'accounts/profile-detail.html'
 
     def get_context_data(self, **kwargs):
+        print(kwargs)
         context = super(ProfileDetailView, self).get_context_data(**kwargs)
         context['user_comp_qs'] = self.object.user.profile.company_set.all()
         context['user_plan'] = self.object.user.profile.get_plan_display()  # .plan #get_modelfield_display()
@@ -303,7 +304,10 @@ class RequestBorrowerProfile(LoginRequiredMixin, SuccessMessageMixin, DetailView
         print(bank_inst)
         country_inst = Country(code=self.request.POST.get('country'))
         print(country_inst, country_inst.name)
+        company = Company.objects.get(name="Amju")
+        print(company)
         borrower_instance = Borrower.objects.get(user=self.get_object())
+        borrower_instance.registered_to = company
         borrower_instance.first_name = self.request.POST.get('firstName')
         borrower_instance.last_name = self.request.POST.get('lastName')
         borrower_instance.gender = self.request.POST.get('gender')
@@ -329,6 +333,10 @@ class RequestBorrowerProfile(LoginRequiredMixin, SuccessMessageMixin, DetailView
             company=self.get_object(), primaryKey=random_string_generator(4)
         ))
         borrower_instance.save()
+
+        thisUser = Profile.objects.get(user=self.request.user)
+        thisUser.phone = self.request.POST.get('landPhone')
+        thisUser.save()
         return JsonResponse({'message': 'Account completed successfully!'})
 
 
