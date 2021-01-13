@@ -52,7 +52,7 @@ class LoanCreateView(LoginRequiredMixin, DetailView):
         context['userCompany_qs'] = self.get_object().user.company_set.all()
         context['user_pkgs'] = self.get_object().user.loantype_set.all()
         context['user_collection_pkgs'] = self.get_object().user.modeofrepayments_set.all()
-        context['borrowers_qs'] = self.get_object().borrower_set.all()
+        context['borrowers_qs'] = Borrower.objects.all()
         context['borrower_group_qs'] = self.get_object().borrowergroup_set.all()
         return context
 
@@ -840,9 +840,9 @@ class LoanRequestViewAdmin(LoginRequiredMixin, ListView):
         return qs
 
     def get_context_data(self, **kwargs):
-        context = super(LoanRequestView, self).get_context_data(**kwargs)
+        context = super(LoanRequestViewAdmin, self).get_context_data(**kwargs)
         return context
 
     def render_to_response(self, context, **response_kwargs):
         print(self.kwargs)
-        return super(LoanRequestView, self).render_to_response(context, **response_kwargs)
+        return super(LoanRequestViewAdmin, self).render_to_response(context, **response_kwargs)
