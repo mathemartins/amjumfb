@@ -223,7 +223,7 @@ class EmailActivation(models.Model):
 
                 from django.core.mail import EmailMessage
                 message = EmailMessage(
-                    subject, txt_, from_email, recipient_list
+                    subject, html_, from_email, recipient_list
                 )
                 message.fail_silently = False
                 message.send()
