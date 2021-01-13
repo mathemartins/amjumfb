@@ -181,13 +181,7 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
         first_name = full_name.split()[0]
         last_name = full_name.split()[1]
 
-        Borrower.objects.get_or_create(
-            user=self.get_object(),
-            first_name=first_name,
-            last_name=last_name,
-            email=self.request.user.email,
-            phone=self.request.user.profile.phone
-        )
+
         context['current_borrower'] = Borrower.objects.get_or_create(user=self.request.user.profile)
 
         if timezone.now() <= self.object.user.profile.trial_days:
