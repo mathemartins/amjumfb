@@ -21,6 +21,8 @@ from django.views.generic import RedirectView, TemplateView
 from accounts.views import LoginView, RegisterView, LogoutView
 
 # core software urls
+from loans.views import LoanRequestViewAdmin
+
 urlpatterns = [
     path('dashboard/', include(('company.urls', 'company-url'), namespace='company-url')),
     path('loans/', include(('loans.urls', 'loans-url'), namespace='loans-url')),
@@ -30,6 +32,7 @@ urlpatterns = [
     path('transactions/', include(('transactions.urls','transactions'), namespace='transactions')),
     path('search/', include(('search.urls','search'), namespace='search')),
     path('minstore/', include(('minmarkets.urls','minstore'), namespace='minstore')),
+    path('loan-requests-staff/', LoanRequestViewAdmin.as_view(), name='loan-requests-admin'),
     path('login/', LoginView.as_view(), name='login'),
     path('register/', RegisterView.as_view(), name='register'),
     path('logout/', LogoutView.as_view(), name='logout'),

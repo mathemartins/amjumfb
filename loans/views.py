@@ -830,3 +830,19 @@ class LoanRequestView(LoginRequiredMixin, ListView):
     def render_to_response(self, context, **response_kwargs):
         print(self.kwargs)
         return super(LoanRequestView, self).render_to_response(context, **response_kwargs)
+
+
+class LoanRequestViewAdmin(LoginRequiredMixin, ListView):
+    template_name = 'loans/loan-request-list-admin.html'
+
+    def get_queryset(self):
+        qs = LoanRequests.objects.all()
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super(LoanRequestView, self).get_context_data(**kwargs)
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        print(self.kwargs)
+        return super(LoanRequestView, self).render_to_response(context, **response_kwargs)

@@ -226,7 +226,7 @@ class EmailActivation(models.Model):
                     subject, txt_, from_email, recipient_list
                 )
                 message.fail_silently = False
-                #message.send()
+                message.send()
         return False
 
 
