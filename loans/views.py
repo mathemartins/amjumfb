@@ -684,6 +684,7 @@ class RemitaStandingOrder(LoginRequiredMixin, DetailView):
 
 class RemitaMandateUpdate(View):
     def post(self, *args, **kwargs):
+        print(self.request.POST)
         if self.request.POST['statuscode'] == statuscode_success:
             mandate_dd = RemitaMandateActivationData.objects.get(requestId=self.request.POST['requestId'])
             mandate_dd.status = self.request.POST['status']
