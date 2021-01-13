@@ -187,7 +187,6 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
             first_name=first_name,
             last_name=last_name,
             email=self.request.user.email,
-            phone=self.request.user.profile.phone
         )
         context['current_borrower'] = Borrower.objects.get_or_create(user=self.request.user.profile)
 
