@@ -137,29 +137,14 @@
                     };
                     _xhr.send(new_payload);
 
-                    if ({{ otpCheck|safe }} === 1) {
-                        $(document).Toasts('create', {
-                            class: 'bg-info',
-                            autohide: true,
-                            delay: 10000,
-                            title: 'OTP Mandate',
+                    // redirect users to print out page
+                    let _mandateId = "{{ loanMandateId|safe }}";
+                    let _merchantId = "{{ company_dd_creds.remita_dd_merchant|safe }}";
+                    let dataHash = "{{ company_dd_creds.remita_dd_merchant|safe }}" + "{{ company_dd_creds.remita_dd_api_key|safe }}" + requestId;
+                    let _hash = CryptoJS.SHA512(dataHash);
+                    let mandateUrl = `{{ base_url }}/remita/ecomm/mandate/form/${_merchantId}/${_hash}/${_mandateId}/${requestId}/rest.reg`;
+                    window.location.replace(mandateUrl);
 
-                            subtitle: 'OTP Mandate Detected!',
-                            body: 'Click On Mandate Validate OTP To Activate OTP Mandate Validation On User Bank'
-                        });
-
-                        setTimeout(function() {
-                            location.reload();
-                        }, 12000);
-                    } else {
-                        // redirect users to print out page
-                        let _mandateId = "{{ loanMandateId|safe }}";
-                        let _merchantId = "{{ company_dd_creds.remita_dd_merchant|safe }}";
-                        let dataHash = "{{ company_dd_creds.remita_dd_merchant|safe }}" + "{{ company_dd_creds.remita_dd_api_key|safe }}" + requestId;
-                        let _hash = CryptoJS.SHA512(dataHash);
-                        let mandateUrl = `{{ base_url }}/remita/ecomm/mandate/form/${_merchantId}/${_hash}/${_mandateId}/${requestId}/rest.reg`;
-                        window.location.replace(mandateUrl);
-                    }
 
                 } else if (json_payload.statuscode === "020") {
                     $(document).Toasts('create', {
