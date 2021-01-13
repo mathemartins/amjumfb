@@ -841,6 +841,9 @@ class LoanRequestViewAdmin(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(LoanRequestViewAdmin, self).get_context_data(**kwargs)
+        company_inst = Company.objects.get(slug=self.kwargs.get('slug'))
+        context['userCompany_qs'] = company_inst.user.company_set.all()
+        context['company'] = context['object'] = company_inst
         return context
 
     def render_to_response(self, context, **response_kwargs):
