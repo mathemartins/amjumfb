@@ -33,7 +33,6 @@ from loans.models import Loan, LoanType, ModeOfRepayments, Penalty, Collateral, 
 from mincore.models import BaseUrl
 from amjuLoans.cloudinary_settings import cloudinary_upload_preset, cloudinary_url
 from amjuLoans.minmarket.packages.remita import remita_dd_url, statuscode_success
-from amjuLoans.mixins import GetObjectMixin
 from amjuLoans.utils import random_string_generator, secondWordExtract, digitExtract, addDays, get_fileType, \
     armotizationLoanCalculator, removeNCharFromString
 
@@ -137,10 +136,7 @@ class LoanCreateView(LoginRequiredMixin, DetailView):
         )
 
         # Send an Email Saying Loan Application Was Made By A User
-        html_ = "Your loan request have been approved by AMJU UNIQUE MFB, you would be sent RRR form or OTP " \
-                "verification" \ 
-                "for final confirmation before funds can be disbursed, Please bear in mind, we would remove our loan " \
-                "processing and insurance fee alongside. "
+        html_ = "Your loan request have been approved by AMJU UNIQUE MFB, you would be sent RRR form or OTP verification for final confirmation before funds can be disbursed, Please bear in mind, we would remove our loan processing and insurance fee alongside."
         subject = 'Loan Request Notice From AMJU'
         from_email = email_settings.EMAIL_HOST_USER
         recipient_list = [self.request.user.email]

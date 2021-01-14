@@ -20,9 +20,6 @@ from django.views.generic import RedirectView, TemplateView
 
 from accounts.views import LoginView, RegisterView, LogoutView
 
-# core software urls
-from loans.views import LoanRequestViewAdmin
-
 urlpatterns = [
     path('dashboard/', include(('company.urls', 'company-url'), namespace='company-url')),
     path('loans/', include(('loans.urls', 'loans-url'), namespace='loans-url')),
