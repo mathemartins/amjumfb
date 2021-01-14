@@ -309,6 +309,7 @@ class RequestBorrowerProfile(LoginRequiredMixin, SuccessMessageMixin, DetailView
         borrower_instance.registered_to = company
         borrower_instance.first_name = self.request.POST.get('firstName')
         borrower_instance.last_name = self.request.POST.get('lastName')
+        borrower_instance.phone = self.request.POST.get('landPhone')
         borrower_instance.gender = self.request.POST.get('gender')
         borrower_instance.address = self.request.POST.get('address')
         borrower_instance.lga = self.request.POST.get('lga')
@@ -336,6 +337,7 @@ class RequestBorrowerProfile(LoginRequiredMixin, SuccessMessageMixin, DetailView
         thisUser = Profile.objects.get(user=self.request.user)
         thisUser.phone = self.request.POST.get('landPhone')
         thisUser.save()
+
         return JsonResponse({'message': 'Account completed successfully!'})
 
 
