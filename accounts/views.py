@@ -223,7 +223,7 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
             loanUser=thisBorrower)
         subject = 'New Loan Application From {loanUser}'.format(loanUser=thisBorrower)
         from_email = email_settings.EMAIL_HOST_USER
-        recipient_list = [self.request.user.email]
+        recipient_list = ['amjuuniquemfb@gmail.com']
 
         from django.core.mail import EmailMessage
         message = EmailMessage(

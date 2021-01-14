@@ -22,6 +22,7 @@ from django.views.generic.base import View
 from rest_framework import status
 
 from accounts.models import Profile, User
+from amjuLoans import email_settings
 from banks.models import BankCode
 from borrowers.models import Borrower
 from company.models import Company, RemitaCredentials, RemitaMandateActivationData, RemitaMandateTransactionRecord, \
@@ -134,6 +135,22 @@ class LoanCreateView(LoginRequiredMixin, DetailView):
             mode_of_repayments=loan_collection_type,
             slug=loan_slug,
         )
+
+        # Send an Email Saying Loan Application Was Made By A User
+        html_ = "Your loan request have been approved by AMJU UNIQUE MFB, you would be sent RRR form or OTP " \
+                "verification" \ 
+                "for final confirmation before funds can be disbursed, Please bear in mind, we would remove our loan " \
+                "processing and insurance fee alongside. "
+        subject = 'Loan Request Notice From AMJU'
+        from_email = email_settings.EMAIL_HOST_USER
+        recipient_list = [self.request.user.email]
+
+        from django.core.mail import EmailMessage
+        message = EmailMessage(
+            subject, html_, from_email, recipient_list
+        )
+        message.fail_silently = False
+        message.send()
 
         base_url = getattr(settings, 'BASE_URL', 'https://amju.herokuapp.com')
 
