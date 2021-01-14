@@ -139,7 +139,7 @@ class LoanCreateView(LoginRequiredMixin, DetailView):
         html_ = "Your loan request have been approved by AMJU UNIQUE MFB, you would be sent RRR form or OTP verification for final confirmation before funds can be disbursed, Please bear in mind, we would remove our loan processing and insurance fee alongside."
         subject = 'Loan Request Notice From AMJU'
         from_email = email_settings.EMAIL_HOST_USER
-        recipient_list = [self.request.user.email]
+        recipient_list = [borrower_inst.email]
 
         from django.core.mail import EmailMessage
         message = EmailMessage(
