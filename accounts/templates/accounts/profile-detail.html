@@ -108,6 +108,7 @@
                 {% if request.user.full_name and request.user.profile.borrower.land_line %}
                     <div class="row" id="analysisResult" hidden>
                       <br/>
+
                       <div class="col-sm-6">
                           <div class="card" style="">
                               <div class="card-body">
@@ -121,6 +122,7 @@
                               </div>
                           </div>
                       </div>
+
                       <div class="col-sm-6">
                           <div class="card" style="">
                               <div class="card-body">
@@ -134,6 +136,17 @@
                               </div>
                           </div>
                       </div>
+
+                      <div class="col-sm-12">
+                        <br/>
+                        <div class="form-group d-flex align-items-center">
+                          <input type="number" id="customUserLoanAmount" min="???" max="???" class="form-control mr-2">
+                            <button type="submit" class="btn btn-primary" id="customButtonApply">
+                                Apply Custom Loan Amount
+                            </button>
+                        </div>
+                      </div>
+
                     </div>
                 {% endif %}
             </div>
@@ -181,6 +194,7 @@
                 </div>
               </form>
             </div>
+
           </div>
         </div>
       </div>
@@ -205,7 +219,7 @@
         $(function () {
             'use strict';
             $(document).ready(function () {
-                const maxLoanAmount = 30000;
+                const maxLoanAmount = 50000;
 
                 let loanApplicationButton = $("#customLoanApplication");
                 {% if request.user.full_name and request.user.profile.borrower.land_line %}
@@ -246,6 +260,19 @@
                         let secondAmount = getRandomInt(firstAmount, appliedLoanAmount);
                         $("#suggestedAmountOne").html('₦ ' + firstAmount);
                         $("#suggestedAmountTwo").html('₦ ' + secondAmount);
+
+
+                        let minAmount = firstAmount;
+                        console.log(minAmount);
+
+                        let maxAmount = secondAmount;
+                        console.log(maxAmount);
+
+                        $('customUserLoanAmount').attr({
+                            "max": maxAmount,
+                            "min": minAmount,
+                        });
+
                         setTimeout(function() {
                             $('#analysisResult').prop("hidden", false);
                             $('#jumboMessage').html('' +
@@ -259,6 +286,18 @@
                         let secondAmount = getRandomInt(firstAmount, appliedLoanAmount);
                         $("#suggestedAmountOne").html('₦ ' + firstAmount);
                         $("#suggestedAmountTwo").html('₦ ' + secondAmount);
+
+                        let minAmount = firstAmount;
+                        console.log(minAmount);
+
+                        let maxAmount = secondAmount;
+                        console.log(maxAmount);
+
+                        $('customUserLoanAmount').attr({
+                            "max": maxAmount,
+                            "min": minAmount,
+                        });
+
                         setTimeout(function() {
                             $('#analysisResult').prop("hidden", false);
                             $('#jumboMessage').html('' +
@@ -369,6 +408,73 @@
                             }
                         })
                     })
+                });
+
+                $('#customButtonApply').on('click', ()=>{
+                    let minAmount = $('#suggestedAmountOne').text();
+                    let finalMinAmount = minAmount.match(/\d/g);
+                    finalMinAmount = finalMinAmount.join("");
+                    console.log(finalMinAmount);
+
+                    let maxAmount = $('#suggestedAmountTwo').text();
+                    let finalMaxAmount = maxAmount.match(/\d/g);
+                    finalMaxAmount = finalMaxAmount.join("");
+                    console.log(finalMaxAmount);
+
+                    let appliedAmount = $('#customUserLoanAmount').val();
+                    console.log(appliedAmount);
+                    appliedAmount = parseInt(appliedAmount);
+
+                    if (appliedAmount > finalMaxAmount){
+                        alert("Requested Loan Amount Is Above Maximum Limit For You");
+                    } else if (appliedAmount < finalMinAmount){
+                        alert("Requested Loan Amount Is Less Minimum Limit For You")
+                    } else {
+                        $('#completeLoanRequest').prop("hidden", false);
+
+                        let loanApplicationCustomButton = $('#completeLoanApplication');
+                        const loanApplicationForm = $('.loanFinalizationForm');
+                        const loanApplicationFormMethod = loanApplicationForm.attr('method');
+                        const loanApplicationFormEndpoint = loanApplicationForm.attr('action');
+
+                        loanApplicationCustomButton.on('click', function (event) {
+                            event.preventDefault();
+
+                            {% include 'csrf_ajax/csrf_ajax_token.js' %}
+
+                            const loanFormData = {
+                                "borrower":'{{current_borrower.user}}',
+                                "amount":''+appliedAmount,
+                                "durationFigure":$('#durationFigure').val(),
+                                "durationPeriod":$('#loanDuration').val(),
+                                "repaymentInterval":$('#repaymentInterval').val()
+                            };
+
+                            console.log(loanFormData);
+
+                            handleClick(loanApplicationCustomButton, "", true);
+
+                            $.ajax({
+                                method: loanApplicationFormMethod,
+                                url: loanApplicationFormEndpoint,
+                                data: loanFormData,
+                                contentType: 'application/x-www-form-urlencoded',
+
+                                success: function (data) {
+                                    loanApplicationForm[0].reset();
+                                    console.log(data);
+                                    alert("Loan Application Successful!");
+                                    setTimeout(function () {
+                                        window.location.replace('/loans/{{request.user.profile.slug}}/loan/request/');
+                                    }, 3000)
+                                }, error: function (error) {
+                                    loanApplicationForm[0].reset();
+                                    alert("Error")
+                                }
+                            })
+                        })
+                    }
+
                 });
             });
         }, jQuery)

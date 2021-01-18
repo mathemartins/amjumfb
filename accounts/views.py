@@ -125,7 +125,7 @@ class RegisterView(SuccessMessageMixin, CreateView):
     form_class = RegisterForm
     template_name = 'accounts/register.html'
     success_url = '/login/'
-    success_message = "An Email Has Been Sent To You For Confirmation, Please Activate Your Email"
+    success_message = "An Email Has Been Sent To You For Confirmation, Please Activate Your Account"
 
 
 class LogoutView(View):
