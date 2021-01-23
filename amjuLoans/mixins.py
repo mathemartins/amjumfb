@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -58,3 +58,21 @@ class IsUserOwnerMixin(object):
         if self.request.user != self.get_object().company.user.user:
             return HttpResponseRedirect(reverse('404_'))
         return super(IsUserOwnerMixin, self).dispatch(request, *args, **kwargs)
+
+
+class HttpResponseMixin(object):
+    is_json = False
+
+    def render_to_response(self, data, status=200):
+        content_type = "text/html"
+        if self.is_json:
+            content_type = 'application/json'
+        return HttpResponse(data, content_type=content_type, status=status)
+
+
+class JsonResponseMixin(object):
+    def render_to_json_response(self, context, **response_kwargs):
+        return JsonResponse(self.get_data(context), **response_kwargs)
+
+    def get_data(self, context):
+        return context

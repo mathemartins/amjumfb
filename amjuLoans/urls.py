@@ -63,6 +63,7 @@ urlpatterns += [
 # api urls
 urlpatterns += [
     path('api/settings/', include(("settings.api.urls", 'settings-api-url'), namespace='settings-api-url')),
+    path('api/accounts/', include(("accounts.api.urls", 'accounts-api-url'), namespace='accounts-api-url')),
 ]
 
 
