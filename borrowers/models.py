@@ -42,6 +42,7 @@ class Borrower(models.Model):
     lga = models.CharField(max_length=255, blank=True, null=True)
     state = models.CharField(max_length=255, choices=STATE, blank=True, null=True, help_text='Province/State')
     country = CountryField(blank=True, null=True, max_length=255)
+    country_text = models.CharField(blank=True, null=True, max_length=255, default="Nigeria")
     title = models.CharField(blank=True, null=True, max_length=255)
     phone = PhoneNumberField(blank=True, null=True)
     land_line = PhoneNumberField(blank=True, null=True)
@@ -51,6 +52,7 @@ class Borrower(models.Model):
     unique_identifier = models.CharField(blank=True, null=True, max_length=255,
                                          help_text='Social Security Number, License Or Registration ID')
     bank = models.ForeignKey(BankCode, on_delete=models.CASCADE, blank=True, null=True)
+    bank_text = models.CharField(blank=True, null=True, max_length=255)
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
     account_number = models.CharField(blank=True, null=True, max_length=255)
     card_number = models.CharField(blank=True, null=True, max_length=19)
