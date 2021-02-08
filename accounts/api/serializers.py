@@ -1,7 +1,8 @@
+import datetime
+
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import update_last_login
 from django.utils import timezone
-from django.utils.datetime_safe import datetime
 from rest_framework import serializers
 from rest_framework_jwt.serializers import jwt_payload_handler, jwt_encode_handler
 from rest_framework_jwt.settings import api_settings
