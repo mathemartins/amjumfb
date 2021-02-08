@@ -8,7 +8,8 @@ from rest_framework_jwt.serializers import jwt_payload_handler, jwt_encode_handl
 from rest_framework_jwt.settings import api_settings
 
 from accounts.api.utils import expire_delta
-from accounts.models import User
+from accounts.models import User, Profile
+from borrowers.models import Borrower
 
 JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
 JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
@@ -88,4 +89,17 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user_obj.set_password(validated_data.get('password'))
         user_obj.is_active = False
         user_obj.save()
+
+        profile = Profile.objects.get(user=user_obj)
+        full_name = str(validated_data.get('full_name'))
+        first_name = full_name.split()[0]
+        last_name = full_name.split()[1]
+
+        Borrower.objects.get_or_create(
+            user=profile,
+            first_name=first_name,
+            last_name=last_name,
+            email=validated_data.get('email'),
+        )
+
         return user_obj
