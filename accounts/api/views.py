@@ -1,10 +1,13 @@
 from rest_framework import status
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import RetrieveAPIView, CreateAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 
-from accounts.api.serializers import UserLoginSerializer
+from accounts.api.permissions import AnonPermissionOnly
+from accounts.api.serializers import UserLoginSerializer, UserRegisterSerializer
+from accounts.api.user.serializers import UserRegistrationSerializer
+from accounts.models import User
 
 
 class UserLoginView(APIView):
@@ -26,35 +29,31 @@ class UserLoginView(APIView):
         status_code = status.HTTP_200_OK
         return Response(response, status=status_code)
 
-# class AuthAPIView(APIView):
-#     permission_classes = [AnonPermissionOnly]
+
+# class UserRegistrationView(CreateAPIView):
+#     serializer_class = UserRegistrationSerializer
+#     permission_classes = (AllowAny,)
 #
 #     def post(self, request, *args, **kwargs):
-#         print(request.user)
-#         if request.user.is_authenticated:
-#             return Response({'detail': 'You are already authenticated'}, status=400)
-#         data = request.data
-#         email = data.get('email')  # username or email address
-#         password = data.get('password')
-#         qs = User.objects.filter(Q(email__iexact=email)).distinct()
-#         if qs.count() == 1:
-#             user_obj = qs.first()
-#             if user_obj.check_password(password):
-#                 user = authenticate(email=email, password=password)
-#                 payload = jwt_payload_handler(user)
-#                 token = jwt_encode_handler(payload)
-#                 response = jwt_response_payload_handler(token, user, request=request)
-#                 return Response(response)
-#         return Response({"detail": "Invalid credentials"}, status=401)
+#         serializer = self.serializer_class(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         status_code =status.HTTP_201_CREATED
+#         response = {
+#             'success': True,
+#             'status_code': status_code,
+#             'message': 'An Email Has Been Sent To You For Confirmation, Please Activate Your Account'
+#         }
+#         return Response(response, status=status_code)
 
 
-# class RegisterAPIView(generics.CreateAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UserRegisterSerializer
-#     permission_classes = [AnonPermissionOnly]
-#
-#     def get_serializer_context(self, *args, **kwargs):
-#         return {"request": self.request}
+class UserRegistrationView(CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserRegisterSerializer
+    permission_classes = [AnonPermissionOnly,]
+
+    def get_serializer_context(self, *args, **kwargs):
+        return {"request": self.request}
 
 
 # class RegisterAPIView(APIView):

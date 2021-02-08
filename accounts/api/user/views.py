@@ -1,9 +1,10 @@
 from rest_framework import status
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import RetrieveAPIView, CreateAPIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
+from accounts.api.user.serializers import UserRegistrationSerializer
 from accounts.models import Profile, User
 from borrowers.models import Borrower
 
