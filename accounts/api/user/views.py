@@ -1,10 +1,9 @@
 from rest_framework import status
-from rest_framework.generics import RetrieveAPIView, CreateAPIView
+from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from accounts.api.user.serializers import UserRegistrationSerializer
 from accounts.models import Profile, User
 from borrowers.models import Borrower
 
@@ -30,6 +29,36 @@ class UserDetailView(RetrieveAPIView):
                     'image': user_profile_obj.get_image,
                     'age': borrower_obj.get_age(),
                     'gender': borrower_obj.gender,
+                }]
+            }
+
+        except Exception as e:
+            status_code = status.HTTP_400_BAD_REQUEST
+            response = {
+                'success': 'false',
+                'status code': status.HTTP_400_BAD_REQUEST,
+                'message': 'User does not exists',
+                'error': str(e)
+            }
+        return Response(response, status=status_code)
+
+
+class ProfileDetailView(RetrieveAPIView):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    authentication_class = JSONWebTokenAuthentication
+
+    def get(self, request):
+        try:
+            user_profile_obj = Profile.objects.get(user=request.user)
+            status_code = status.HTTP_200_OK
+            response = {
+                'success': 'true',
+                'status code': status_code,
+                'message': 'Profile fetched successfully',
+                'data': [{
+                    'slug': user_profile_obj.slug,
+                    'token': user_profile_obj.token,
+                    'keycode': user_profile_obj.keycode,
                 }]
             }
 

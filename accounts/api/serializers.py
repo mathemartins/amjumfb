@@ -100,6 +100,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             first_name=first_name,
             last_name=last_name,
             email=validated_data.get('email'),
+            registered_to='Amju'
         )
 
         return user_obj
