@@ -98,7 +98,7 @@ class Borrower(models.Model):
             today = date.today()
             return today.year - self.date_of_birth.year - (
                     (today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
-        return "Not Specified"
+        return 0
 
     def get_absolute_url(self):
         return reverse("borrowers-url:borrower-detail",
