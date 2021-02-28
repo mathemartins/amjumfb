@@ -20,15 +20,12 @@ class BorrowerAccountDetails(RetrieveAPIView):
             status_code = status.HTTP_200_OK
             response = {
                 'success': 'true',
-                'status_code': status_code,
+                'status code': status_code,
                 'message': 'Borrower Account fetched successfully',
                 'data': [{
                     'account_number': borrower_amju_account.account_no,
                     'account_type': borrower_amju_account.account_type,
                     'balance': borrower_amju_account.balance,
-                    'active': borrower_amju_account.active,
-                    'timestamp': borrower_amju_account.timestamp,
-                    'updated': borrower_amju_account.updated,
                 }]
             }
 
