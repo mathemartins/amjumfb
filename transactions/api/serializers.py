@@ -8,7 +8,6 @@ class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = [
-            'company',
             'amount',
             'account',
             'balance_after_transaction',
