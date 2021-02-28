@@ -18,4 +18,6 @@ class TransactionListAPIView(ListAPIView):
     def get_queryset(self):
         user_profile_obj = Profile.objects.get(user=self.request.user)
         borrower_obj = Borrower.objects.get(user=user_profile_obj)
-        return BorrowerBankAccount.objects.get(borrower=borrower_obj).transactions
+        borrower_account = BorrowerBankAccount.objects.get(borrower=borrower_obj)
+        print(borrower_obj, borrower_account)
+        return Transaction.objects.filter(account=borrower_account)
