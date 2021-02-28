@@ -10,7 +10,7 @@ from transactions.models import Transaction
 
 
 class TransactionListAPIView(ListAPIView):
-    authentication_classes = [BasicAuthentication, SessionAuthentication, JSONWebTokenAuthentication]
+    authentication_classes = [JSONWebTokenAuthentication, BasicAuthentication, SessionAuthentication]
     serializer_class = TransactionSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
     paginate_by = 15
@@ -18,6 +18,6 @@ class TransactionListAPIView(ListAPIView):
     def get_queryset(self):
         user_profile_obj = Profile.objects.get(user=self.request.user)
         borrower_obj = Borrower.objects.get(user=user_profile_obj)
+        print(borrower_obj)
         borrower_account = BorrowerBankAccount.objects.get(borrower=borrower_obj)
-        print(borrower_obj, borrower_account)
         return Transaction.objects.filter(account=borrower_account)
