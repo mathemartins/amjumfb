@@ -12,5 +12,4 @@ class TransactionSerializer(serializers.ModelSerializer):
             'account',
             'balance_after_transaction',
             'transaction_type',
-            'timestamp',
         ]
