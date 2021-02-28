@@ -67,6 +67,7 @@ urlpatterns += [
     path('api/accounts/retrieve/', include(("accounts.api.user.urls", 'accounts-api-user-url'), namespace='accounts-api-user-url')),
     path('api/borrower/details/retrieve/', include(("borrowers.api.urls", 'borrowers-api-url'), namespace='borrowers-api-url')),
     path('api/loans/loan-requests/retrieve/', include(("loans.api.urls", 'loans-api-url'), namespace='loans-api-url')),
+    path('api/transactions/retrieve/', include(("transactions.api.urls", 'transactions-api-url'), namespace='transactions-api-url')),
 ]
 
 

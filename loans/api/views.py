@@ -18,8 +18,7 @@ class LoanRequestListAPIView(ListAPIView):
     def get_queryset(self):
         user_profile_obj = Profile.objects.get(user=self.request.user)
         borrower_obj = Borrower.objects.get(user=user_profile_obj)
-        user_loan_requests = borrower_obj.loanrequests_set.all()
-        return user_loan_requests
+        return borrower_obj.loanrequests_set.all()
 
 
 class LoanRequestDetailAPIView(RetrieveAPIView):
@@ -30,10 +29,8 @@ class LoanRequestDetailAPIView(RetrieveAPIView):
     def get_queryset(self):
         user_profile_obj = Profile.objects.get(user=self.request.user)
         borrower_obj = Borrower.objects.get(user=user_profile_obj)
-        user_loan_requests = borrower_obj.loanrequests_set.all()
-        return user_loan_requests
+        return borrower_obj.loanrequests_set.all()
 
     def get_object(self):
         slug = self.kwargs["slug"]
-        obj = get_object_or_404(LoanRequests, slug=slug)
-        return obj
+        return get_object_or_404(LoanRequests, slug=slug)
