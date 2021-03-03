@@ -157,6 +157,11 @@ class BorrowerBankAccount(models.Model):
         start = self.interest_start_date.month
         return [i for i in range(start, 13, interval)]
 
+    def get_account_type(self):
+        if self.account_type:
+            return self.account_type.name
+        return "No Account Type Assigned"
+
 
 class BorrowerGroup(models.Model):
     registered_to = models.ForeignKey(to='company.Company', on_delete=models.CASCADE, blank=True, null=True)

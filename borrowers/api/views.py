@@ -24,7 +24,7 @@ class BorrowerAccountDetails(RetrieveAPIView):
                 'message': 'Borrower Account fetched successfully',
                 'data': [{
                     'account_number': borrower_amju_account.account_no,
-                    'account_type': borrower_amju_account.account_type,
+                    'account_type': borrower_amju_account.get_account_type(),
                     'balance': borrower_amju_account.balance,
                 }]
             }
