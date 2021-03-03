@@ -312,7 +312,8 @@ class LoanActivityComments(models.Model):
 REQUEST_STATUS = (
     ('Granted', 'Granted'),
     ('Rejected', 'Rejected'),
-    ('Still Processing', 'Still Processing')
+    ('Still Processing', 'Still Processing'),
+    ('Completed', 'Completed')
 )
 
 
