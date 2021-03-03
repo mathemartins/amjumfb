@@ -48,7 +48,7 @@ class FundingTransactionView(APIView):
         method = data.get('method')
         verify = data.get('verify')
 
-        amount = int(self.request.POST.get('amount'))
+        amount = int(data.get('amount'))
         company = "Amju"
         company_instance = Company.objects.get(name=company)
         user_profile_obj = Profile.objects.get(user=self.request.user)
