@@ -1,11 +1,13 @@
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from accounts.models import Profile
 from borrowers.models import Borrower, BorrowerBankAccount
+from company.models import Company
 from transactions.api.serializers import TransactionSerializer
 from transactions.models import Transaction
 
@@ -29,29 +31,33 @@ class FundingTransactionView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def post(self, request, *args, **kwargs):
-        print(request.data, request.POST)
-        # if request.user.is_authenticated():
-        #     return Response({'detail': 'You are already registered and are authenticated.'}, status=400)
-        # data = request.data
-        # username = data.get('username')  # username or email address
-        # email = data.get('username')
-        # password = data.get('password')
-        # password2 = data.get('password2')
-        # qs = User.objects.filter(
-        #     Q(username__iexact=username) |
-        #     Q(email__iexact=username)
-        # )
-        # if password != password2:
-        #     return Response({"password": "Password must match."}, status=401)
-        # if qs.exists():
-        #     return Response({"detail": "This user already exists"}, status=401)
-        # else:
-        #     user = User.objects.create(username=username, email=email)
-        #     user.set_password(password)
-        #     user.save()
-        #     # payload = jwt_payload_handler(user)
-        #     # token = jwt_encode_handler(payload)
-        #     # response = jwt_response_payload_handler(token, user, request=request)
-        #     # return Response(response, status=201)
-        #     return Response({'detail': "Thank you for registering. Please verify your email."}, status=201)
-        # return Response({"detail": "Invalid Request"}, status=400)
+        print(request.data)
+        data = request.data
+        message = data.get('message')
+        card_name = data.get('cardName')
+        card_cvc = data.get('cardCVC')
+        card_expiryMonth = data.get('expiryMonth')
+        card_last4digits = data.get('last4Digits')
+        card_number = data.get('cardNumber')
+        card_type = data.get('cardType')
+        reference = data.get('reference')
+        status = data.get('status')
+        method = data.get('method')
+        verify = data.get('verify')
+
+        company = "Amju"
+        company_instance = Company.objects.get(name=company)
+        user_profile_obj = Profile.objects.get(user=self.request.user)
+        borrower_obj = Borrower.objects.get(user=user_profile_obj)
+        borrower_account = BorrowerBankAccount.objects.get(borrower=borrower_obj)
+
+        if message == 'Success':
+            transact = Transaction.objects.create(
+                company=company_instance,
+                account=borrower_account,
+                amount = 2000.00,
+                transaction_type = 1,
+            )
+            print(transact)
+            return Response({'detail': "Thank you for registering. Please verify your email."}, status=201)
+        return Response({"detail": "Invalid Request"}, status=400)
