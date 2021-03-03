@@ -1,3 +1,5 @@
+from dateutil.relativedelta import relativedelta
+from django.utils import timezone
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
@@ -34,6 +36,7 @@ class FundingTransactionView(APIView):
         print(request.data)
         data = request.data
         message = data.get('message')
+        amount = data.get('amount')
         card_name = data.get('cardName')
         card_cvc = data.get('cardCVC')
         card_expiryMonth = data.get('expiryMonth')
@@ -45,19 +48,63 @@ class FundingTransactionView(APIView):
         method = data.get('method')
         verify = data.get('verify')
 
+        amount = int(self.request.POST.get('amount'))
         company = "Amju"
         company_instance = Company.objects.get(name=company)
         user_profile_obj = Profile.objects.get(user=self.request.user)
-        borrower_obj = Borrower.objects.get(user=user_profile_obj)
-        borrower_account = BorrowerBankAccount.objects.get(borrower=borrower_obj)
+        borrower = Borrower.objects.get(user=user_profile_obj)
+        borrower_account = BorrowerBankAccount.objects.get(borrower=borrower)
 
         if message == 'Success':
-            transact = Transaction.objects.create(
-                company=company_instance,
-                account=borrower_account,
-                amount = 2000.00,
-                transaction_type = 1,
-            )
-            print(transact)
-            return Response({'detail': "Thank you for registering. Please verify your email."}, status=201)
-        return Response({"detail": "Invalid Request"}, status=400)
+            if not borrower_account.initial_deposit_date:
+                now = timezone.now()
+                next_interest_month = int(12 / borrower_account.account_type.interest_calculation_per_year)
+                borrower_account.initial_deposit_date = now
+                borrower_account.interest_start_date = (
+                        now + relativedelta(months=+next_interest_month)
+                )
+                borrower_account.company = company_instance
+                borrower_account.borrower = borrower
+                borrower_account.balance += amount
+                borrower_account.save(
+                    update_fields=[
+                        'company',
+                        'borrower',
+                        'initial_deposit_date',
+                        'balance',
+                        'interest_start_date'
+                    ]
+                )
+                borrower_account_new = BorrowerBankAccount.objects.get(borrower=borrower)
+                Transaction.objects.create(
+                    company=company_instance,
+                    account=borrower_account,
+                    amount=amount,
+                    balance_after_transaction=borrower_account_new.balance,
+                    transaction_type=1
+                )
+                payload_message = f'₦{amount} was deposited to your account successfully'
+                return Response({'message': payload_message}, status=201)
+            else:
+                borrower_account.company = company_instance
+                borrower_account.borrower = borrower
+                borrower_account.balance += amount
+                borrower_account.save(
+                    update_fields=[
+                        'company',
+                        'borrower',
+                        'balance',
+                    ]
+                )
+                borrower_account_new = BorrowerBankAccount.objects.get(borrower=borrower)
+                Transaction.objects.create(
+                    company=company_instance,
+                    account=borrower_account,
+                    amount=amount,
+                    balance_after_transaction=borrower_account_new.balance,
+                    transaction_type=1
+                )
+                payload_message = f'₦{amount} was deposited to your account successfully'
+                return Response({'message': payload_message})
+        else:
+            return Response({'message': "Payment Funding Was Unsuccesful, Try again!"})
