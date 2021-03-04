@@ -108,3 +108,38 @@ class FundingTransactionView(APIView):
                 return Response({'message': payload_message})
         else:
             return Response({'message': "Payment Funding Was Unsuccesful, Try again!"})
+
+
+class WithdrawalTransactionView(APIView):
+    authentication_classes = [JSONWebTokenAuthentication, BasicAuthentication, SessionAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def post(self, request, *args, **kwargs):
+        print(request.data)
+        data = request.data
+        amount = int(data.get('amount'))
+        company = "Amju"
+        company_instance = Company.objects.get(name=company)
+        user_profile_obj = Profile.objects.get(user=self.request.user)
+        borrower = Borrower.objects.get(user=user_profile_obj)
+        borrower_account = BorrowerBankAccount.objects.get(borrower=borrower)
+
+        if borrower_account.balance >= amount:
+            borrower_account.balance -= amount
+
+            borrower_account.save(update_fields=['balance'])
+
+            borrower_account_new = BorrowerBankAccount.objects.get(borrower=borrower)
+            Transaction.objects.create(
+                company=company_instance,
+                account=borrower_account,
+                amount=amount,
+                balance_after_transaction=borrower_account_new.balance,
+                transaction_type=2
+            )
+
+            payload_message = f'Successfully withdrawn ₦{amount} from your account'
+            return Response({'message': payload_message}, status=201)
+        else:
+            payload_message = f'Request amount ₦{amount} cannot be withdrawn from your balance ₦{borrower_account.balance}'
+            return Response({'message': payload_message}, status=400)
