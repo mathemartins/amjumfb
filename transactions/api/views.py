@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from accounts.models import Profile
+from amjuLoans import email_settings
 from borrowers.models import Borrower, BorrowerBankAccount
 from company.models import Company
 from transactions.api.serializers import TransactionSerializer
@@ -83,6 +84,19 @@ class FundingTransactionView(APIView):
                     balance_after_transaction=borrower_account_new.balance,
                     transaction_type=1
                 )
+                # Send an Email Saying Loan Application Was Made By A User
+                html_ = "The User ({loanUser}), just credited their amju savings account".format(
+                    loanUser=borrower)
+                subject = 'New Credit Notice From {loanUser}'.format(loanUser=borrower)
+                from_email = email_settings.EMAIL_HOST_USER
+                recipient_list = ['amjuuniquemfb@gmail.com']
+
+                from django.core.mail import EmailMessage
+                message = EmailMessage(
+                    subject, html_, from_email, recipient_list
+                )
+                message.fail_silently = False
+                message.send()
                 payload_message = f'₦{amount} was deposited to your account successfully'
                 return Response({'message': payload_message}, status=201)
             else:
@@ -104,6 +118,19 @@ class FundingTransactionView(APIView):
                     balance_after_transaction=borrower_account_new.balance,
                     transaction_type=1
                 )
+                # Send an Email Saying Loan Application Was Made By A User
+                html_ = "The User ({loanUser}), just credited their amju savings account".format(
+                    loanUser=borrower)
+                subject = 'New Credit Notice From {loanUser}'.format(loanUser=borrower)
+                from_email = email_settings.EMAIL_HOST_USER
+                recipient_list = ['amjuuniquemfb@gmail.com']
+
+                from django.core.mail import EmailMessage
+                message = EmailMessage(
+                    subject, html_, from_email, recipient_list
+                )
+                message.fail_silently = False
+                message.send()
                 payload_message = f'₦{amount} was deposited to your account successfully'
                 return Response({'message': payload_message})
         else:
@@ -137,6 +164,20 @@ class WithdrawalTransactionView(APIView):
                 balance_after_transaction=borrower_account_new.balance,
                 transaction_type=2
             )
+
+            # Send an Email Saying Loan Application Was Made By A User
+            html_ = "The User ({loanUser}), just requested for a withdrawal from their amju savings account".format(
+                loanUser=borrower)
+            subject = 'New Withdrawal Notice From {loanUser}'.format(loanUser=borrower)
+            from_email = email_settings.EMAIL_HOST_USER
+            recipient_list = ['amjuuniquemfb@gmail.com']
+
+            from django.core.mail import EmailMessage
+            message = EmailMessage(
+                subject, html_, from_email, recipient_list
+            )
+            message.fail_silently = False
+            message.send()
 
             payload_message = f'Successfully withdrawn ₦{amount} from your account'
             return Response({'message': payload_message}, status=201)
