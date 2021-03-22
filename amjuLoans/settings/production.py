@@ -205,6 +205,6 @@ MINIMUM_DEPOSIT_AMOUNT = 500
 MINIMUM_WITHDRAWAL_AMOUNT = 500
 
 from amjuLoans import celery_config
-from amjuLoans.ssl_config import *
+# from amjuLoans.ssl_config import *
 
 from amjuLoans.restconf.main import *

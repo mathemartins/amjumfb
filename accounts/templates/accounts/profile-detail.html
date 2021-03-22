@@ -114,9 +114,7 @@
                               <div class="card-body">
                                 <h5 class="card-title" id="suggestedAmountOne">₦ 15,000</h5>
                                 <p class="card-text">
-                                    rate: 5 % monthly<br/>
-                                    rate: 3 % weekly<br/>
-                                    rate: 1.5 % Daily<br/>
+                                    rate: 10 % monthly<br/>
                                 </p>
                                 <button href="#" class="btn btn-primary btn-block" id="firstButtonApply">Apply</button>
                               </div>
@@ -128,9 +126,7 @@
                               <div class="card-body">
                                 <h5 class="card-title" id="suggestedAmountTwo">₦ 34,000</h5>
                                 <p class="card-text">
-                                    rate: 5 % monthly<br/>
-                                    rate: 3 % weekly<br/>
-                                    rate: 1.5 % Daily<br/>
+                                    rate: 10 % monthly<br/>
                                 </p>
                                 <button href="#" class="btn btn-primary btn-block" id="secondButtonApply">Apply</button>
                               </div>
@@ -157,12 +153,9 @@
                         <label>Select Loan Duration</label>
                     </div>
                     <div class="form-group d-flex align-items-center">
-                      <input type="number" id="durationFigure" class="form-control mr-2" required>
+                      <input type="number" id="durationFigure" class="form-control mr-2" value="1" disabled required>
                       <select class="form-control mr-2" id="loanDuration" required>
-                        <option value="Years">Years</option>
-                        <option value="Months">Months</option>
-                        <option value="Weeks">Weeks</option>
-                        <option value="Days">Days</option>
+                        <option value="Months">Month (30 days)</option>
                       </select>
                     </div>
                     <div class="form-group d-flex align-items-center">
@@ -170,10 +163,8 @@
                     </div>
                     <div class="form-group d-flex align-items-center">
                       <select class="form-control mr-2" id="repaymentInterval" required>
-                        <option value="Yearly">Yearly</option>
                         <option value="Monthly">Monthly</option>
                         <option value="Weekly">Weekly</option>
-                        <option value="Daily">Daily</option>
                       </select>
                     </div>
                     <div class="form-group d-flex align-items-center">
@@ -219,7 +210,7 @@
         $(function () {
             'use strict';
             $(document).ready(function () {
-                const maxLoanAmount = 50000;
+                const maxLoanAmount = 12000;
 
                 let loanApplicationButton = $("#customLoanApplication");
                 {% if request.user.full_name and request.user.profile.borrower.land_line %}

@@ -114,7 +114,11 @@
               We are still dedicated to the success of our clients.
             </p>
             {% if request.user.is_authenticated %}
-              <p><a href="{% if request.user.is_staff %}/dashboard/{{request.user.profile.working_for.first.slug}}/{% else %} {% url 'account:profile-detail' request.user.profile.slug %} {% endif %}" class="btn">Continue To Loan Dashboard / Account Profile</a> </p>
+              <p>
+                <a href="{% if request.user.is_staff %}/dashboard/{{request.user.profile.working_for.first.slug}}/{% else %} {% url 'account:profile-detail' request.user.profile.slug %} {% endif %}" class="btn btn-primary">
+                  Continue To Loan Dashboard / Account Profile
+                </a>
+              </p>
             {% else %}
               <p><a href="{% url 'register' %}" class="btn">Apply For Loan</a> </p>
             {% endif %}
@@ -146,26 +150,25 @@
           </div>
           <div class="col-lg-5 ml-auto" data-aos="fade-up" data-aos-delay="100">
             <div class="mb-4">
-              <h3 class="h3 mb-4 text-black">Amortization Computation</h3>
-              <p>Amortization Loan Powered Computation</p>
+              <h3 class="h3 mb-4 text-black">AMJU LOAN</h3>
+              <p>Amortization Powered Loans</p>
 
             </div>
 
             <div class="mb-4">
               <ul class="list-unstyled ul-check success">
-                <li>Auto Calculate Loan Remitance Fee</li>
-                <li>A.I Armotization </li>
+                <li>Get Loan Services</li>
+                <li>10% Loan Interest Rate For 30Days</li>
+                <li>LockFunds Banking Account &amp; Savings</li>
+                <li>Interests, Account Name &amp; Numbers</li>
               </ul>
 
             </div>
 
             <div class="mb-4">
-              <form action="#">
-                <div class="form-group d-flex align-items-center">
-                  <input type="text" class="form-control mr-2" placeholder="Enter your email">
-                  <input type="submit" class="btn btn-primary" value="Submit Email">
-                </div>
-              </form>
+              <a href="#" class="btn btn-primary">
+                Download Our App On Android &amp; iOS
+              </a>
             </div>
 
 
@@ -174,44 +177,6 @@
         </div>
       </div>
     </div>
-
-
-    <div class="site-section cta-big-image" id="about-section">
-      <div class="container">
-        <div class="row mb-5 justify-content-center">
-          <div class="col-md-8 text-center">
-            <h2 class="section-title mb-3" data-aos="fade-up" data-aos-delay="">About Us</h2>
-            <p class="lead" data-aos="fade-up" data-aos-delay="100">
-              At Amju Unique Micro Finance Bank, we are guided by a common purpose to help make financial lives better by connecting clients
-              and communities to the resource they need to be successful.
-            </p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-6 mb-5" data-aos="fade-up" data-aos-delay="">
-            <figure class="circle-bg">
-            <img src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/images/hero_1.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
-            </figure>
-          </div>
-          <div class="col-lg-5 ml-auto" data-aos="fade-up" data-aos-delay="100">
-
-            <h3 class="text-black mb-4">We Solve Your Financial Problem</h3>
-
-            <p>
-              Our lending pattern is unique, standing on the shoulders of the bank themselves(Amju Unique Microfinance), we scrutinize user details and information
-              Making sure end user information is accurately collected.
-            </p>
-
-            <p>
-              Our loan span ranges from NGN 2,000 to to NGN 500,000 and we give swiftly based on user credit worthiness or loan integrity status
-            </p>
-
-          </div>
-        </div>
-
-      </div>
-    </div>
-
 
     <section class="site-section">
       <div class="container">
@@ -260,258 +225,6 @@
             </div>
 
           </div>
-        </div>
-      </div>
-    </section>
-
-
-    <section class="site-section border-bottom bg-light" id="services-section">
-      <div class="container">
-        <div class="row mb-5">
-          <div class="col-12 text-center" data-aos="fade">
-            <h2 class="section-title mb-3">Our Services</h2>
-          </div>
-        </div>
-        <div class="row align-items-stretch">
-          <div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up">
-            <div class="unit-4">
-              <div class="unit-4-icon">
-                <img src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/images/flaticon-svg/svg/001-wallet.svg" alt="Free Website Template by Free-Template.co" class="img-fluid w-25 mb-4">
-              </div>
-              <div>
-                <h3>Lending</h3>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-                <p><a href="#">Learn More</a></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up" data-aos-delay="100">
-            <div class="unit-4">
-              <div class="unit-4-icon">
-                <img src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/images/flaticon-svg/svg/006-credit-card.svg" alt="Free Website Template by Free-Template.co" class="img-fluid w-25 mb-4">
-              </div>
-              <div>
-                <h3>Savings</h3>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-                <p><a href="#">Learn More</a></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up" data-aos-delay="200">
-            <div class="unit-4">
-              <div class="unit-4-icon">
-                <img src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/images/flaticon-svg/svg/005-megaphone.svg" alt="Free Website Template by Free-Template.co" class="img-fluid w-25 mb-4">
-              </div>
-              <div>
-                <h3>Financial Management</h3>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-                <p><a href="#">Learn More</a></p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <section class="site-section testimonial-wrap" id="testimonials-section" data-aos="fade">
-      <div class="container">
-        <div class="row mb-5">
-          <div class="col-12 text-center">
-            <h2 class="section-title mb-3">Happy Customers</h2>
-          </div>
-        </div>
-      </div>
-      <div class="slide-one-item home-slider owl-carousel">
-          <div>
-            <div class="testimonial">
-
-              <blockquote class="mb-5">
-                <p>&ldquo;Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.&rdquo;</p>
-              </blockquote>
-
-              <figure class="mb-4 d-flex align-items-center justify-content-center">
-                <div><img src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/images/person_3.jpg" alt="Image" class="w-50 img-fluid mb-3"></div>
-                <p>John Smith</p>
-              </figure>
-            </div>
-          </div>
-          <div>
-            <div class="testimonial">
-
-              <blockquote class="mb-5">
-                <p>&ldquo;A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.&rdquo;</p>
-              </blockquote>
-              <figure class="mb-4 d-flex align-items-center justify-content-center">
-                <div><img src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/images/person_2.jpg" alt="Image" class="w-50 img-fluid mb-3"></div>
-                <p>Christine Aguilar</p>
-              </figure>
-
-            </div>
-          </div>
-
-          <div>
-            <div class="testimonial">
-
-              <blockquote class="mb-5">
-                <p>&ldquo;Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.&rdquo;</p>
-              </blockquote>
-              <figure class="mb-4 d-flex align-items-center justify-content-center">
-                <div><img src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/images/person_4.jpg" alt="Image" class="w-50 img-fluid mb-3"></div>
-                <p>Robert Spears</p>
-              </figure>
-
-
-            </div>
-          </div>
-
-          <div>
-            <div class="testimonial">
-
-              <blockquote class="mb-5">
-                <p>&ldquo;The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen. She packed her seven versalia, put her initial into the belt and made herself on the way.&rdquo;</p>
-              </blockquote>
-              <figure class="mb-4 d-flex align-items-center justify-content-center">
-                <div><img src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/images/person_4.jpg" alt="Image" class="w-50 img-fluid mb-3"></div>
-                <p>Bruce Rogers</p>
-              </figure>
-
-            </div>
-          </div>
-
-        </div>
-    </section>
-
-    <section class="site-section" id="about-section">
-      <div class="container">
-
-        <div class="row">
-          <div class="col-lg-6 mb-5" data-aos="fade-up" data-aos-delay="">
-            <figure class="circle-bg">
-            <img src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/images/hero_1.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
-            </figure>
-          </div>
-          <div class="col-lg-5 ml-auto" data-aos="fade-up" data-aos-delay="100">
-
-
-            <div class="row">
-
-
-
-              <div class="col-12 mb-4" data-aos="fade-up" data-aos-delay="">
-                <div class="unit-4 d-flex">
-                  <div class="unit-4-icon mr-4 mb-3"><span class="text-primary flaticon-head"></span></div>
-                  <div>
-                    <h3>Bank Loan</h3>
-                    <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                    <p class="mb-0"><a href="#">Learn More</a></p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 mb-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="unit-4 d-flex">
-                  <div class="unit-4-icon mr-4 mb-3"><span class="text-primary flaticon-smartphone"></span></div>
-                  <div>
-                    <h3>Banking Consulation </h3>
-                    <p>Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-                    <p class="mb-0"><a href="#">Learn More</a></p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-
-          </div>
-        </div>
-
-
-      </div>
-    </section>
-
-    <section class="site-section bg-light" id="contact-section" data-aos="fade">
-      <div class="container">
-        <div class="row mb-5">
-          <div class="col-12 text-center">
-            <h2 class="section-title mb-3">Contact Us</h2>
-          </div>
-        </div>
-        <div class="row mb-5">
-
-
-
-          <div class="col-md-4 text-center">
-            <p class="mb-4">
-              <span class="icon-room d-block h2 text-primary"></span>
-              <span>71, Airport Road, Warri Delta</span>
-            </p>
-          </div>
-          <div class="col-md-4 text-center">
-            <p class="mb-4">
-              <span class="icon-phone d-block h2 text-primary"></span>
-              <a href="#">+234 804 567 8996, +234 805 624 9328</a>
-            </p>
-          </div>
-          <div class="col-md-4 text-center">
-            <p class="mb-0">
-              <span class="icon-mail_outline d-block h2 text-primary"></span>
-              <a href="#">amju.unique@amjuuniquemfbng.com</a>
-            </p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12 mb-5">
-
-
-
-            <form action="#" class="p-5 bg-white">
-
-              <h2 class="h4 text-black mb-5">Contact Form</h2>
-
-              <div class="row form-group">
-                <div class="col-md-6 mb-3 mb-md-0">
-                  <label class="text-black" for="fname">First Name</label>
-                  <input type="text" id="fname" class="form-control">
-                </div>
-                <div class="col-md-6">
-                  <label class="text-black" for="lname">Last Name</label>
-                  <input type="text" id="lname" class="form-control">
-                </div>
-              </div>
-
-              <div class="row form-group">
-
-                <div class="col-md-12">
-                  <label class="text-black" for="email">Email</label>
-                  <input type="email" id="email" class="form-control">
-                </div>
-              </div>
-
-              <div class="row form-group">
-
-                <div class="col-md-12">
-                  <label class="text-black" for="subject">Subject</label>
-                  <input type="subject" id="subject" class="form-control">
-                </div>
-              </div>
-
-              <div class="row form-group">
-                <div class="col-md-12">
-                  <label class="text-black" for="message">Message</label>
-                  <textarea name="message" id="message" cols="30" rows="7" class="form-control" placeholder="Write your notes or questions here..."></textarea>
-                </div>
-              </div>
-
-              <div class="row form-group">
-                <div class="col-md-12">
-                  <input type="submit" value="Send Message" class="btn btn-primary btn-md text-white">
-                </div>
-              </div>
-
-
-            </form>
-          </div>
-
         </div>
       </div>
     </section>

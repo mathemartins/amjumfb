@@ -74,8 +74,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     def get_token(self, obj):  # instance of the model
         user = obj
         payload = jwt_payload_handler(user)
-        token = jwt_encode_handler(payload)
-        return token
+        return jwt_encode_handler(payload)
 
     def validate(self, data):
         pw = data.get('password')
