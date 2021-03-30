@@ -10,6 +10,7 @@ from rest_framework_jwt.settings import api_settings
 from accounts.api.utils import expire_delta
 from accounts.models import User, Profile
 from borrowers.models import Borrower
+from company.models import Company
 
 JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
 JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
@@ -93,13 +94,14 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         full_name = str(validated_data.get('full_name'))
         first_name = full_name.split()[0]
         last_name = full_name.split()[1]
+        company_instance = Company.objects.get(name='Amju')
 
         Borrower.objects.get_or_create(
             user=profile,
             first_name=first_name,
             last_name=last_name,
             email=validated_data.get('email'),
-            registered_to='Amju'
+            registered_to=company_instance
         )
 
         return user_obj
