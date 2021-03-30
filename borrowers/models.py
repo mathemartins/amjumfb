@@ -1,8 +1,11 @@
 from cloudinary.models import CloudinaryField
 from datetime import date
+
+from django.conf import settings
 from django.db import models
 
 # Create your models here.
+from django.db.models.signals import post_save
 from django.urls import reverse
 from django.utils import timezone
 from django_countries.fields import CountryField
@@ -11,6 +14,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from accounts.constants import GENDER_CHOICE
 from accounts.models import upload_image_path
 from banks.models import BankCode
+from company.models import BankAccountType, Company
 
 GENDER = (
     ('Male', 'Male'),
@@ -109,6 +113,27 @@ class Borrower(models.Model):
         if hasattr(self, 'account'):
             return self.account.balance
         return 0
+
+
+def post_save_borrower_create_reciever(sender, instance, created, *args, **kwargs):
+    if created:
+        print(instance)
+        company_instance = Company.objects.get(name='Amju')
+        bank_account_type = BankAccountType.objects.get(slug='save-up-jumbo')
+        BorrowerBankAccount.objects.create(
+            company=company_instance,
+            borrower=instance,
+            account_type=bank_account_type,
+            account_no=(
+                    instance.id + settings.ACCOUNT_NUMBER_START_FROM
+            ),
+            balance=0,
+            interest_start_date=timezone.now(),
+            initial_deposit_date=timezone.now()
+        )
+
+
+post_save.connect(post_save_borrower_create_reciever, sender=Borrower)
 
 
 class BorrowerBankAccount(models.Model):

@@ -326,9 +326,12 @@ class Profile(models.Model):
 
 
 def pre_save_email_activation(sender, instance, *args, **kwargs):
-    if not instance.activated and not instance.forced_expired:
-        if not instance.key:
-            instance.key = unique_key_generator(instance)
+    if (
+        not instance.activated
+        and not instance.forced_expired
+        and not instance.key
+    ):
+        instance.key = unique_key_generator(instance)
 
 
 pre_save.connect(pre_save_email_activation, sender=EmailActivation)
