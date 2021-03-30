@@ -56,11 +56,11 @@ class BorrowerDetailView(RetrieveAPIView):
                 'data': [{
                     'address': borrower_obj.get_address(),
                     'lga': borrower_obj.lga,
-                    'country': str(borrower_obj.country.name),
+                    'country': str(borrower_obj.country),
                     'businessName': borrower_obj.business_name,
                     'workingStatus': borrower_obj.working_status,
                     'nin': borrower_obj.unique_identifier,
-                    'bank': str(borrower_obj.bank.name),
+                    'bank': str(borrower_obj.bank),
                     'accountNumber': borrower_obj.account_number,
                     'bvn': borrower_obj.bvn,
                     'age': borrower_obj.get_age()
