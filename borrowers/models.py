@@ -47,7 +47,7 @@ class Borrower(models.Model):
     state = models.CharField(max_length=255, choices=STATE, blank=True, null=True, help_text='Province/State')
     country = CountryField(blank=True, null=True, max_length=255)
     country_text = models.CharField(blank=True, null=True, max_length=255, default="Nigeria")
-    title = models.CharField(blank=True, null=True, max_length=255)
+    title = models.CharField(blank=True, null=True, default='Mr', max_length=255)
     phone = PhoneNumberField(blank=True, null=True)
     land_line = PhoneNumberField(blank=True, null=True)
     business_name = models.CharField(max_length=255, blank=True, null=True)
