@@ -148,7 +148,7 @@ class LoanCreateView(LoginRequiredMixin, DetailView):
         message.fail_silently = False
         message.send()
 
-        base_url = getattr(settings, 'BASE_URL', 'https://amju.herokuapp.com')
+        base_url = getattr(settings, 'BASE_URL', 'https://loans.amjuuniquemfbng.com')
 
         if str(loan_collection_type) == "Remita Direct Debit":
             urlpath = reverse('loans-url:loan-standing-order-create',
@@ -190,20 +190,21 @@ class LoanListView(LoginRequiredMixin, ListView):
                                "Account Expired!, Your Account Has Been Expired You Would Be "
                                "Redirected To The Payment Portal Upgrade Your Payment")
                 return HttpResponseRedirect(reverse("mincore-url:account-upgrade"))
-            staff_array = list()
-            for user_obj in context.get('object').staffs.all():
-                staff_array.append(str(user_obj))
-            if self.request.user.email in staff_array or self.request.user.email == str(
-                    context.get('object').user.user.email):
-                pass
-            else:
+            staff_array = [
+                str(user_obj) for user_obj in context.get('object').staffs.all()
+            ]
+
+            if (
+                self.request.user.email not in staff_array
+                and self.request.user.email
+                != str(context.get('object').user.user.email)
+            ):
                 redirect(reverse('404_'))
         return super(LoanListView, self).render_to_response(context, **response_kwargs)
 
     def get_queryset(self, *args, **kwargs):
         company_obj = Company.objects.get(slug=self.kwargs.get('slug'))
-        qs = self.queryset.filter(company=company_obj)
-        return qs
+        return self.queryset.filter(company=company_obj)
 
 
 class LoanDetailView(LoginRequiredMixin, DetailView):
@@ -833,12 +834,10 @@ class LoanRequestView(LoginRequiredMixin, ListView):
     template_name = 'loans/loan-request-list.html'
 
     def get_queryset(self):
-        qs = LoanRequests.objects.filter(borrower=self.request.user.profile.borrower)
-        return qs
+        return LoanRequests.objects.filter(borrower=self.request.user.profile.borrower)
 
     def get_context_data(self, **kwargs):
-        context = super(LoanRequestView, self).get_context_data(**kwargs)
-        return context
+        return super(LoanRequestView, self).get_context_data(**kwargs)
 
     def render_to_response(self, context, **response_kwargs):
         print(self.kwargs)
@@ -849,8 +848,7 @@ class LoanRequestViewAdmin(LoginRequiredMixin, ListView):
     template_name = 'loans/loan-request-list-admin.html'
 
     def get_queryset(self):
-        qs = LoanRequests.objects.all()
-        return qs
+        return LoanRequests.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super(LoanRequestViewAdmin, self).get_context_data(**kwargs)
