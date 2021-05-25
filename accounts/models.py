@@ -208,7 +208,7 @@ class EmailActivation(models.Model):
     def send_activation(self):
         if not self.activated and not self.forced_expired:
             if self.key:
-                base_url = getattr(settings, 'BASE_URL', 'https://www.minloans.com.ng')
+                base_url = getattr(settings, 'BASE_URL', 'https://amju.herokuapp.com')
                 key_path = reverse("account:email-activate", kwargs={'key': self.key})  # use reverse
                 path = "{base}{path}".format(base=base_url, path=key_path)
                 context = {
@@ -217,7 +217,7 @@ class EmailActivation(models.Model):
                 }
                 txt_ = get_template("registration/emails/verify.txt").render(context)
                 html_ = get_template("registration/emails/verify.html").render(context)
-                subject = 'Minloansng 1-Click Email Verification'
+                subject = 'AMJU LOANS Email Click Verification'
                 from_email = email_settings.EMAIL_HOST_USER
                 recipient_list = [self.email]
 
@@ -326,9 +326,12 @@ class Profile(models.Model):
 
 
 def pre_save_email_activation(sender, instance, *args, **kwargs):
-    if not instance.activated and not instance.forced_expired:
-        if not instance.key:
-            instance.key = unique_key_generator(instance)
+    if (
+        not instance.activated
+        and not instance.forced_expired
+        and not instance.key
+    ):
+        instance.key = unique_key_generator(instance)
 
 
 pre_save.connect(pre_save_email_activation, sender=EmailActivation)

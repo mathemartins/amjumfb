@@ -1,8 +1,11 @@
 from cloudinary.models import CloudinaryField
 from datetime import date
+
+from django.conf import settings
 from django.db import models
 
 # Create your models here.
+from django.db.models.signals import post_save
 from django.urls import reverse
 from django.utils import timezone
 from django_countries.fields import CountryField
@@ -11,6 +14,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from accounts.constants import GENDER_CHOICE
 from accounts.models import upload_image_path
 from banks.models import BankCode
+from company.models import BankAccountType, Company
 
 GENDER = (
     ('Male', 'Male'),
@@ -42,7 +46,8 @@ class Borrower(models.Model):
     lga = models.CharField(max_length=255, blank=True, null=True)
     state = models.CharField(max_length=255, choices=STATE, blank=True, null=True, help_text='Province/State')
     country = CountryField(blank=True, null=True, max_length=255)
-    title = models.CharField(blank=True, null=True, max_length=255)
+    country_text = models.CharField(blank=True, null=True, max_length=255, default="Nigeria")
+    title = models.CharField(blank=True, null=True, default='Mr', max_length=255)
     phone = PhoneNumberField(blank=True, null=True)
     land_line = PhoneNumberField(blank=True, null=True)
     business_name = models.CharField(max_length=255, blank=True, null=True)
@@ -51,8 +56,13 @@ class Borrower(models.Model):
     unique_identifier = models.CharField(blank=True, null=True, max_length=255,
                                          help_text='Social Security Number, License Or Registration ID')
     bank = models.ForeignKey(BankCode, on_delete=models.CASCADE, blank=True, null=True)
+    bank_text = models.CharField(blank=True, null=True, max_length=255)
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
     account_number = models.CharField(blank=True, null=True, max_length=255)
+    card_number = models.CharField(blank=True, null=True, max_length=19)
+    expiry_month = models.CharField(max_length=10, blank=True, null=True)
+    expiry_year = models.CharField(max_length=10, blank=True, null=True)
+    cvv = models.CharField(max_length=3, blank=True, null=True)
     bvn = models.CharField(blank=True, null=True, max_length=255, help_text='Bank Verification Number')
     date_of_birth = models.DateField(null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True, blank=True, null=True)
@@ -87,24 +97,43 @@ class Borrower(models.Model):
         else:
             return self.photo.url
 
-
-
-
     def get_age(self):
         if self.date_of_birth:
             today = date.today()
             return today.year - self.date_of_birth.year - (
-                        (today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
-        return "Not Specified"
+                    (today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
+        return 0
 
     def get_absolute_url(self):
-        return reverse("borrowers-url:borrower-detail", kwargs={"slug":self.registered_to.slug, "slug_borrower": self.slug})
+        return reverse("borrowers-url:borrower-detail",
+                       kwargs={"slug": self.registered_to.slug, "slug_borrower": self.slug})
 
     @property
     def balance(self):
         if hasattr(self, 'account'):
             return self.account.balance
         return 0
+
+
+def post_save_borrower_create_reciever(sender, instance, created, *args, **kwargs):
+    if created:
+        print(instance)
+        company_instance = Company.objects.get(name='Amju')
+        bank_account_type = BankAccountType.objects.get(slug='save-up-jumbo')
+        BorrowerBankAccount.objects.create(
+            company=company_instance,
+            borrower=instance,
+            account_type=bank_account_type,
+            account_no=(
+                    instance.id + settings.ACCOUNT_NUMBER_START_FROM
+            ),
+            balance=0,
+            interest_start_date=timezone.now(),
+            initial_deposit_date=timezone.now()
+        )
+
+
+post_save.connect(post_save_borrower_create_reciever, sender=Borrower)
 
 
 class BorrowerBankAccount(models.Model):
@@ -152,6 +181,11 @@ class BorrowerBankAccount(models.Model):
         )
         start = self.interest_start_date.month
         return [i for i in range(start, 13, interval)]
+
+    def get_account_type(self):
+        if self.account_type:
+            return self.account_type.name
+        return "No Account Type Assigned"
 
 
 class BorrowerGroup(models.Model):

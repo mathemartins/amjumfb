@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
-
+import datetime
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -206,18 +206,5 @@ MINIMUM_WITHDRAWAL_AMOUNT = 500
 
 from amjuLoans import celery_config
 from amjuLoans.ssl_config import *
-DEFAULT_RENDERER_CLASSES = [
-    'rest_framework.renderers.JSONRenderer',
-]
 
-if DEBUG:
-    DEFAULT_RENDERER_CLASSES += [
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    ]
-REST_FRAMEWORK = {
-
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication'
-    ],
-    'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES
-}
+from amjuLoans.restconf.main import *

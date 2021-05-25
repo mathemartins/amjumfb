@@ -22,6 +22,7 @@ from django.views.generic.base import View
 from rest_framework import status
 
 from accounts.models import Profile, User
+from amjuLoans import email_settings
 from banks.models import BankCode
 from borrowers.models import Borrower
 from company.models import Company, RemitaCredentials, RemitaMandateActivationData, RemitaMandateTransactionRecord, \
@@ -32,7 +33,6 @@ from loans.models import Loan, LoanType, ModeOfRepayments, Penalty, Collateral, 
 from mincore.models import BaseUrl
 from amjuLoans.cloudinary_settings import cloudinary_upload_preset, cloudinary_url
 from amjuLoans.minmarket.packages.remita import remita_dd_url, statuscode_success
-from amjuLoans.mixins import GetObjectMixin
 from amjuLoans.utils import random_string_generator, secondWordExtract, digitExtract, addDays, get_fileType, \
     armotizationLoanCalculator, removeNCharFromString
 
@@ -52,7 +52,7 @@ class LoanCreateView(LoginRequiredMixin, DetailView):
         context['userCompany_qs'] = self.get_object().user.company_set.all()
         context['user_pkgs'] = self.get_object().user.loantype_set.all()
         context['user_collection_pkgs'] = self.get_object().user.modeofrepayments_set.all()
-        context['borrowers_qs'] = self.get_object().borrower_set.all()
+        context['borrowers_qs'] = Borrower.objects.all()
         context['borrower_group_qs'] = self.get_object().borrowergroup_set.all()
         return context
 
@@ -135,7 +135,20 @@ class LoanCreateView(LoginRequiredMixin, DetailView):
             slug=loan_slug,
         )
 
-        base_url = getattr(settings, 'BASE_URL', 'https://amju.herokuapp.com')
+        # Send an Email Saying Loan Application Was Made By A User
+        html_ = "Your loan request have been approved by AMJU UNIQUE MFB, you would be sent RRR form or OTP verification for final confirmation before funds can be disbursed, Please bear in mind, we would remove our loan processing and insurance fee alongside."
+        subject = 'Loan Request Notice From AMJU'
+        from_email = email_settings.EMAIL_HOST_USER
+        recipient_list = [borrower_inst.email]
+
+        from django.core.mail import EmailMessage
+        message = EmailMessage(
+            subject, html_, from_email, recipient_list
+        )
+        message.fail_silently = False
+        message.send()
+
+        base_url = getattr(settings, 'BASE_URL', 'https://loans.amjuuniquemfbng.com')
 
         if str(loan_collection_type) == "Remita Direct Debit":
             urlpath = reverse('loans-url:loan-standing-order-create',
@@ -148,7 +161,7 @@ class LoanCreateView(LoginRequiredMixin, DetailView):
             urlpath = ""
             finalpath = ""
             loan_data = ""
-        elif str(loan_collection_type) == "Quick Loans":
+        elif str(loan_collection_type) == "Paystack Partial Debit":
             urlpath = ""
             finalpath = ""
             loan_data = ""
@@ -177,20 +190,21 @@ class LoanListView(LoginRequiredMixin, ListView):
                                "Account Expired!, Your Account Has Been Expired You Would Be "
                                "Redirected To The Payment Portal Upgrade Your Payment")
                 return HttpResponseRedirect(reverse("mincore-url:account-upgrade"))
-            staff_array = list()
-            for user_obj in context.get('object').staffs.all():
-                staff_array.append(str(user_obj))
-            if self.request.user.email in staff_array or self.request.user.email == str(
-                    context.get('object').user.user.email):
-                pass
-            else:
+            staff_array = [
+                str(user_obj) for user_obj in context.get('object').staffs.all()
+            ]
+
+            if (
+                self.request.user.email not in staff_array
+                and self.request.user.email
+                != str(context.get('object').user.user.email)
+            ):
                 redirect(reverse('404_'))
         return super(LoanListView, self).render_to_response(context, **response_kwargs)
 
     def get_queryset(self, *args, **kwargs):
         company_obj = Company.objects.get(slug=self.kwargs.get('slug'))
-        qs = self.queryset.filter(company=company_obj)
-        return qs
+        return self.queryset.filter(company=company_obj)
 
 
 class LoanDetailView(LoginRequiredMixin, DetailView):
@@ -684,6 +698,7 @@ class RemitaStandingOrder(LoginRequiredMixin, DetailView):
 
 class RemitaMandateUpdate(View):
     def post(self, *args, **kwargs):
+        print(self.request.POST)
         if self.request.POST['statuscode'] == statuscode_success:
             mandate_dd = RemitaMandateActivationData.objects.get(requestId=self.request.POST['requestId'])
             mandate_dd.status = self.request.POST['status']
@@ -819,13 +834,29 @@ class LoanRequestView(LoginRequiredMixin, ListView):
     template_name = 'loans/loan-request-list.html'
 
     def get_queryset(self):
-        qs = LoanRequests.objects.filter(borrower=self.request.user.profile.borrower)
-        return qs
+        return LoanRequests.objects.filter(borrower=self.request.user.profile.borrower)
 
     def get_context_data(self, **kwargs):
-        context = super(LoanRequestView, self).get_context_data(**kwargs)
-        return context
+        return super(LoanRequestView, self).get_context_data(**kwargs)
 
     def render_to_response(self, context, **response_kwargs):
         print(self.kwargs)
         return super(LoanRequestView, self).render_to_response(context, **response_kwargs)
+
+
+class LoanRequestViewAdmin(LoginRequiredMixin, ListView):
+    template_name = 'loans/loan-request-list-admin.html'
+
+    def get_queryset(self):
+        return LoanRequests.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(LoanRequestViewAdmin, self).get_context_data(**kwargs)
+        company_inst = Company.objects.get(slug=self.kwargs.get('slug'))
+        context['userCompany_qs'] = company_inst.user.company_set.all()
+        context['company'] = context['object'] = company_inst
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        print(self.kwargs)
+        return super(LoanRequestViewAdmin, self).render_to_response(context, **response_kwargs)

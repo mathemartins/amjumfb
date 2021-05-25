@@ -3,6 +3,7 @@ import os
 import random
 import string
 
+import math
 from django.utils import timezone
 from django.utils.text import slugify
 
@@ -213,7 +214,7 @@ def armotizationLoanCalculator(pAmount, interest, nRepayment):
     nRepayment = int(nRepayment)
 
     sInterest = pAmount * (interest_ / 100)
-    sRepayment = pAmount / nRepayment
+    sRepayment = math.ceil(pAmount / nRepayment)
 
     return int(sRepayment + sInterest)
 
