@@ -1,0 +1,4 @@
+#!c:\users\alphador\pycharmprojects\amjumfb\scripts\python.exe
+
+from pyflakes.scripts.pyflakes import main
+main()

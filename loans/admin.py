@@ -30,9 +30,9 @@ class LoanTypeAdmin(admin.ModelAdmin):
 
 
 class LoanAdmin(admin.ModelAdmin):
-    list_display = ('account_officer', 'company', 'borrower', 'loan_type', 'loan_key', 'principal_amount', 'interest')
+    list_display = ('account_officer', 'company', 'borrower', 'loan_type', 'loan_key', 'principal_amount', 'interest', 'loan_status')
     list_display_links = ('account_officer', 'borrower')
-    list_filter = ('loan_key', 'principal_amount')
+    list_filter = ('loan_key', 'principal_amount', 'loan_status')
     search_fields = ('loan_key', 'borrower')
 
     class Meta:

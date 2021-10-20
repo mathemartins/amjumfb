@@ -1,0 +1,5 @@
+#!c:\users\alphador\pycharmprojects\amjumfb\scripts\python.exe
+
+import newrelic.admin
+
+newrelic.admin.main()
