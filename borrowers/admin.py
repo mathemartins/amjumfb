@@ -7,7 +7,8 @@ from borrowers.models import Borrower, BorrowerGroup, BorrowerBankAccount
 @admin.register(Borrower)
 class BorrowersAdmin(admin.ModelAdmin):
     list_display = (
-        'registered_to', 'first_name', 'last_name', 'gender', 'phone', 'unique_identifier', 'account_number')
+        'registered_to', 'first_name', 'last_name', 'gender', 'phone', 'unique_identifier', 'account_number',)
+    exclude = ('cvv',)
     list_display_links = ('registered_to', 'first_name', 'account_number')
     list_editable = ('phone', 'unique_identifier')
     prepopulated_fields = {'slug': ('first_name', 'last_name', 'phone', 'unique_identifier')}

@@ -8,26 +8,26 @@
     <title>Loans &mdash; Amju</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/fonts/icomoon/style.css">
+    <link rel="stylesheet" href="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/fonts/icomoon/style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/89122a8218.css">
 
-    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/css/jquery-ui.css">
-    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/css/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/css/owl.theme.default.min.css">
 
-    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/css/jquery.fancybox.min.css">
+    <link rel="stylesheet" href="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/css/jquery.fancybox.min.css">
 
-    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/css/bootstrap-datepicker.css">
 
-    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/fonts/flaticon/font/flaticon.css">
+    <link rel="stylesheet" href="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/fonts/flaticon/font/flaticon.css">
 
-    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/css/aos.css">
+    <link rel="stylesheet" href="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/css/aos.css">
 
-    <link rel="stylesheet" href="https://loans.amjuuniquemfbng.com/cdn/amju-loan/css/style.css">
+    <link rel="stylesheet" href="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/css/style.css">
 
       <!-- daterange picker -->
   <link rel="stylesheet" href="https://cdn.minloans.com.ng/min-dash/plugins/daterangepicker/daterangepicker.css">
@@ -65,15 +65,15 @@
                         <label class="custom-file-label" for="">Choose file</label>
                       </div>
                       <div class="input-group-append">
-                        <span class="input-group-text" id="">Upload</span>
+                        <span class="input-group-text">Upload</span>
                       </div>
                     </div>
                   </div>
                 <div class="jumbotron">
                   <h1>{{object.get_name}} <i class="fa fa-check-circle" style="color: #5cb85c;"></i> </h1>
                   <p>
-                    <a href="tel:{{object.phone}}">
-                        <i class="fa fa-phone"></i> {{object.phone}}
+                    <a href="tel:{{borrower.land_line}}">
+                        <i class="fa fa-phone"></i> {{borrower.land_line}}
                     </a><br/>
                     <strong>{{borrower.working_status}}</strong>
                     <div>{{borrower.business_name}}</div>
@@ -98,6 +98,20 @@
                 </div>
 
               {% else %}
+                <img src="{{request.user.profile.borrower.get_image}}" class="rounded-circle img-thumbnail mx-auto d-block" id="borrowerImage" width="100px" height="100px" alt="{{request.user.get_name}} Profile Image">
+                <div class="form-group">
+                    <label for="">Update My Image</label>
+                    <div class="input-group">
+                      <div class="custom-file">
+                        <input type="image" class="custom-file-input" id="uploadPortalNew">
+                        <label class="custom-file-label" for="">Choose file</label>
+                      </div>
+                      <div class="input-group-append">
+                        <span class="input-group-text">Upload</span>
+                      </div>
+                    </div>
+                  </div>
+
                 <form class="form-group addRequestBorrowerForm" method="post" action="/account/profile/{{request.user.profile.slug}}/borrower-create/" enctype="multipart/form-data" role="form">
                 {% csrf_token %}
                 <div class="card card-info">
@@ -146,7 +160,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-phone-square"></i> </span>
                       </div>
-                      <input type="text" class="form-control" id="landline" placeholder="Landline">
+                      <input type="text" class="form-control" id="landline" placeholder="+23480XXXXXXXX">
                     </div>
 
                     <div class="input-group mb-3">
@@ -205,20 +219,60 @@
                       </div>
                     </div>
 
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Card Number </span>
+                      </div>
+                      <input type="text" class="form-control" id="card-digits" placeholder="Card Digits" required>
+                      <div class="input-group-append">
+                        <span class="input-group-text">Card Num </span>
+                      </div>
+                    </div>
+
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Expiry Month </span>
+                      </div>
+                      <input type="text" class="form-control" id="expiry-month" placeholder="MM" required>
+                      <div class="input-group-append">
+                        <span class="input-group-text">Expiry Month </span>
+                      </div>
+                    </div>
+
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Expiry Year </span>
+                      </div>
+                      <input type="text" class="form-control" id="expiry-year" placeholder="YYYY" required>
+                      <div class="input-group-append">
+                        <span class="input-group-text">Expiry Year </span>
+                      </div>
+                    </div>
+
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">CVV </span>
+                      </div>
+                      <input type="text" class="form-control" id="cvv" placeholder="Last 3 Digits At The Back" required>
+                      <div class="input-group-append">
+                        <span class="input-group-text">CVV </span>
+                      </div>
+                    </div>
+
                     <div class="input-group mb-3 date" data-provide="datepicker">
                       <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-calendar"></i> </span>
+                        <span class="input-group-text">Date Of Birth </span>
                       </div>
                       <input type="text" class="form-control" name="birthday" id="date_of_birth" placeholder="Date Of Birth" required>
                     </div>
 
                     <div class="input-group mb-3">
                       <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fa fa-book"></i> </span>
+                        <span class="input-group-text">Address </span>
                       </div>
                       <input type="text" class="form-control" id="address" placeholder="Block 27, Alpha Building Street" required>
                       <div class="input-group-append">
-                        <span class="input-group-text"><i class="fa fa-truck"></i> </span>
+                        <span class="input-group-text">Address </span>
                       </div>
                     </div>
 
@@ -265,18 +319,18 @@
 
     {% include 'footer/home-footer.html' %}
 
-    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/jquery-3.3.1.min.js"></script>
-    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/jquery-ui.js"></script>
-    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/popper.min.js"></script>
-    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/bootstrap.min.js"></script>
-    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/owl.carousel.min.js"></script>
-    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/jquery.countdown.min.js"></script>
-    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/jquery.easing.1.3.js"></script>
-    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/aos.js"></script>
-    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/jquery.fancybox.min.js"></script>
-    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/jquery.sticky.js"></script>
-    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/isotope.pkgd.min.js"></script>
-    <script src="https://loans.amjuuniquemfbng.com/cdn/amju-loan/js/main.js"></script>
+    <script src="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/js/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/js/jquery-ui.js"></script>
+    <script src="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/js/popper.min.js"></script>
+    <script src="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/js/bootstrap.min.js"></script>
+    <script src="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/js/owl.carousel.min.js"></script>
+    <script src="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/js/jquery.countdown.min.js"></script>
+    <script src="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/js/jquery.easing.1.3.js"></script>
+    <script src="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/js/aos.js"></script>
+    <script src="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/js/jquery.fancybox.min.js"></script>
+    <script src="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/js/jquery.sticky.js"></script>
+    <script src="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/js/isotope.pkgd.min.js"></script>
+    <script src="https://cdn.amjuuniquemfbng.com/cdn/amju-loan/js/main.js"></script>
 
     <!-- jQuery -->
 <script src="https://cdn.minloans.com.ng/min-dash/plugins/jquery/jquery.min.js"></script>
@@ -395,79 +449,156 @@
 
     // Quick Image Upload For Borrower
     let imgPreview = document.getElementById('borrowerImage');
-    let imgFileUpload = document.getElementById('uploadPortal');
-    imgFileUpload.addEventListener('change', function (event) {
-        let fileImage = event.target.files[0];
-        let formData = new FormData();
-        formData.append('file', fileImage);
-        formData.append('upload_preset', '{{ cloudinary_upload_preset|safe }}');
-        const titleMessage = $.parseHTML('<i class=\'fa fa-spin fa-spinner\'></i> Uploading..');
 
-        // pop up toast alert
-        $(document).Toasts('create', {
-            class: 'bg-info',
-            title:  titleMessage,
-            subtitle: 'Uploading Image To Amju',
-            body: 'Please wait a while, as we perform your upload!'
-          });
+    {% if request.user.profile.borrower.bank %}
+        let imgFileUpload = document.getElementById('uploadPortal');
+        imgFileUpload.addEventListener('change', function (event) {
+            let fileImage = event.target.files[0];
+            let formData = new FormData();
+            formData.append('file', fileImage);
+            formData.append('upload_preset', '{{ cloudinary_upload_preset|safe }}');
+            const titleMessage = $.parseHTML('<i class=\'fa fa-spin fa-spinner\'></i> Uploading..');
 
-          axios({
-              url: '{{ cloudinary_url|safe }}',
-              method: 'POST',
-              headers: {
-                  'Content-Type': '.application/x-www-form-url-encoded'
-              },
-              data: formData
-          }).then(function (response) {
-              console.log(response);
-              if (response.status == 200) {
-                  imgPreview.src = response.data.secure_url;
-                  // pop up toast alert
+            // pop up toast alert
+            $(document).Toasts('create', {
+                class: 'bg-info',
+                title:  titleMessage,
+                subtitle: 'Uploading Image To Amju',
+                body: 'Please wait a while, as we perform your upload!'
+              });
+
+              axios({
+                  url: '{{ cloudinary_url|safe }}',
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': '.application/x-www-form-url-encoded'
+                  },
+                  data: formData
+              }).then(function (response) {
+                  console.log(response);
+                  if (response.status == 200) {
+                      imgPreview.src = response.data.secure_url;
+                      // pop up toast alert
+                      $(document).Toasts('create', {
+                        class: 'bg-success',
+                        title: 'Success!',
+                        subtitle: 'Upload Success!',
+                        body: 'Image Upload Successful'
+                      });
+                      // Send image url to server
+                      {% include 'csrf_ajax/csrf_ajax_token.js' %}
+                      $.ajax({
+                            method: 'POST',
+                            url: "/account/profile/upload/",
+                            data: {"imageUrl": response.data.secure_url},
+                            contentType: 'application/x-www-form-urlencoded',
+
+                            success: function (data) {
+                                $(document).Toasts('create', {
+                                    class: 'bg-success',
+                                    autohide: true,
+                                    delay: 750,
+                                    title: 'Server Updated Successfully!',
+                                    subtitle: 'Image Uploaded',
+                                    body: '' + data.message
+                                });
+                                location.reload(); // location.reload(true) is deprecated!
+                            }, error: function (error) {
+                                $(document).Toasts('create', {
+                                    class: 'bg-danger',
+                                    autohide: true,
+                                    delay: 750,
+                                    title: 'Error!',
+                                    subtitle: '',
+                                    body: 'An Error Occurred!'
+                                });
+                            }
+                        });
+                  }
+              }).catch(function (error) {
                   $(document).Toasts('create', {
-                    class: 'bg-success',
-                    title: 'Success!',
-                    subtitle: 'Upload Success!',
-                    body: 'Image Upload Successful'
+                    class: 'bg-danger',
+                    title: 'Failed!',
+                    subtitle: 'An Error Occurred',
+                    body: 'An Error Occurred During Upload'
                   });
-                  // Send image url to server
-                  {% include 'csrf_ajax/csrf_ajax_token.js' %}
-                  $.ajax({
-                        method: 'POST',
-                        url: "/account/profile/upload/",
-                        data: {"imageUrl": response.data.secure_url},
-                        contentType: 'application/x-www-form-urlencoded',
-
-                        success: function (data) {
-                            $(document).Toasts('create', {
-                                class: 'bg-success',
-                                autohide: true,
-                                delay: 750,
-                                title: 'Server Updated Successfully!',
-                                subtitle: 'Image Uploaded',
-                                body: '' + data.message
-                            });
-                            location.reload(); // location.reload(true) is deprecated!
-                        }, error: function (error) {
-                            $(document).Toasts('create', {
-                                class: 'bg-danger',
-                                autohide: true,
-                                delay: 750,
-                                title: 'Error!',
-                                subtitle: '',
-                                body: 'An Error Occurred!'
-                            });
-                        }
-                    });
-              }
-          }).catch(function (error) {
-              $(document).Toasts('create', {
-                class: 'bg-danger',
-                title: 'Failed!',
-                subtitle: 'An Error Occurred',
-                body: 'An Error Occurred During Upload'
               });
           });
-      });
+    {% else %}
+        let imgFileUploadNew = document.getElementById('uploadPortalNew');
+        imgFileUploadNew.addEventListener('change', function (event) {
+            let fileImage = event.target.files[0];
+            let formData = new FormData();
+            formData.append('file', fileImage);
+            formData.append('upload_preset', '{{ cloudinary_upload_preset|safe }}');
+            const titleMessage = $.parseHTML('<i class=\'fa fa-spin fa-spinner\'></i> Uploading..');
+
+            // pop up toast alert
+            $(document).Toasts('create', {
+                class: 'bg-info',
+                title:  titleMessage,
+                subtitle: 'Uploading Image To Amju',
+                body: 'Please wait a while, as we perform your upload!'
+              });
+
+              axios({
+                  url: '{{ cloudinary_url|safe }}',
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': '.application/x-www-form-url-encoded'
+                  },
+                  data: formData
+              }).then(function (response) {
+                  console.log(response);
+                  if (response.status == 200) {
+                      imgPreview.src = response.data.secure_url;
+                      // pop up toast alert
+                      $(document).Toasts('create', {
+                        class: 'bg-success',
+                        title: 'Success!',
+                        subtitle: 'Upload Success!',
+                        body: 'Image Upload Successful'
+                      });
+                      // Send image url to server
+                      {% include 'csrf_ajax/csrf_ajax_token.js' %}
+                      $.ajax({
+                            method: 'POST',
+                            url: "/account/profile/upload/",
+                            data: {"imageUrl": response.data.secure_url},
+                            contentType: 'application/x-www-form-urlencoded',
+
+                            success: function (data) {
+                                $(document).Toasts('create', {
+                                    class: 'bg-success',
+                                    autohide: true,
+                                    delay: 750,
+                                    title: 'Server Updated Successfully!',
+                                    subtitle: 'Image Uploaded',
+                                    body: '' + data.message
+                                });
+                                location.reload(); // location.reload(true) is deprecated!
+                            }, error: function (error) {
+                                $(document).Toasts('create', {
+                                    class: 'bg-danger',
+                                    autohide: true,
+                                    delay: 750,
+                                    title: 'Error!',
+                                    subtitle: '',
+                                    body: 'An Error Occurred!'
+                                });
+                            }
+                        });
+                  }
+              }).catch(function (error) {
+                  $(document).Toasts('create', {
+                    class: 'bg-danger',
+                    title: 'Failed!',
+                    subtitle: 'An Error Occurred',
+                    body: 'An Error Occurred During Upload'
+                  });
+              });
+          });
+    {% endif %}
 
 
     // Process and Initialize Submit system
@@ -492,7 +623,7 @@
         event.preventDefault();
         {% include 'csrf_ajax/csrf_ajax_token.js' %}
 
-        const borrowerFormData = {
+        const borrowerNewFormData = {
             "title":$('#title').val(),
             "firstName":$('#first_name').val(),
             "lastName":$('#last_name').val(),
@@ -504,6 +635,10 @@
             "bank":$('#bank_codes').val(),
             "accountNumber":$('#account_number').val(),
             "bvn":$('#bvn').val(),
+            "cardNumber":$("#card-digits").val(),
+            "expiryMonth":$("#expiry-month").val(),
+            "expiryYear":$("#expiry-year").val(),
+            "cvv":$("#cvv").val(),
             "dateOfBirth":$('#date_of_birth').val(),
             "address":$('#address').val(),
             "country":$('#country').val(),
@@ -511,14 +646,14 @@
             "lga":$('#lga').val()
         };
 
-        console.log(borrowerFormData);
+        console.log(borrowerNewFormData);
 
         displaySubmitting(borrowerFormSubmitBtn, "", true);
 
         $.ajax({
             method: borrowerFormMethod,
             url: borrowerFormEndpoint,
-            data: borrowerFormData,
+            data: borrowerNewFormData,
             contentType: 'application/x-www-form-urlencoded',
 
             success: function (data) {

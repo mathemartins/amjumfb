@@ -60,6 +60,7 @@ class BorrowerCreateView(GetObjectMixin, LoginRequiredMixin, DetailView):
             lga=self.request.POST.get('lga'),
             state=self.request.POST.get('state'),
             country=country_inst,
+            country_text=country_inst.name,
             title=self.request.POST.get('title'),
             phone=self.request.POST.get('phone'),
             land_line=self.request.POST.get('landPhone'),
@@ -68,6 +69,7 @@ class BorrowerCreateView(GetObjectMixin, LoginRequiredMixin, DetailView):
             email=self.request.POST.get('email'),
             unique_identifier=self.request.POST.get('unique_identifier'),
             bank=bank_inst,
+            bank_text=bank_inst.name,
             account_number=self.request.POST.get('accountNumber'),
             bvn=self.request.POST.get('bvn'),
             date_of_birth=self.request.POST.get('dateOfBirth'),
@@ -123,13 +125,9 @@ class BorrowerUpdateView(LoginRequiredMixin, DetailView):
                                "Account Expired!, Your Account Has Been Expired You Would Be "
                                "Redirected To The Payment Portal Upgrade Your Payment")
                 return HttpResponseRedirect(reverse("mincore-url:account-upgrade"))
-            staff_array = list()
-            for user_obj in self.get_object().staffs.all():
-                staff_array.append(str(user_obj))
-            if self.request.user.email in staff_array or self.request.user.email == str(
+            staff_array = [str(user_obj) for user_obj in self.get_object().staffs.all()]
+            if self.request.user.email not in staff_array and self.request.user.email != str(
                     self.get_object().user.user.email):
-                pass
-            else:
                 redirect(reverse('404_'))
         return super(BorrowerUpdateView, self).render_to_response(context, **response_kwargs)
 
@@ -269,8 +267,7 @@ class BorrowerGroupsListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         company = Company.objects.get(slug=self.kwargs.get('slug'))
-        bg_qs = company.borrowergroup_set.all()
-        return bg_qs
+        return company.borrowergroup_set.all()
 
 
 class AssignBankAccountToBorrower(LoginRequiredMixin, DetailView):
@@ -281,9 +278,9 @@ class AssignBankAccountToBorrower(LoginRequiredMixin, DetailView):
         context = super(AssignBankAccountToBorrower, self).get_context_data(**kwargs)
         mfb_account_type_qs = BankAccountType.objects.filter(company=self.object)
         context.update({
-            'userCompany_qs':self.object.user.company_set.all(),
-            'borrowers_qs':self.object.borrower_set.all(),
-            'account_type_qs':mfb_account_type_qs
+            'userCompany_qs': self.object.user.company_set.all(),
+            'borrowers_qs': self.object.borrower_set.all(),
+            'account_type_qs': mfb_account_type_qs
         })
         return context
 
@@ -295,8 +292,8 @@ class AssignBankAccountToBorrower(LoginRequiredMixin, DetailView):
             company=self.get_object(),
             borrower=borrower_obj,
             account_type=bank_account_type,
-            account_no = (
-                borrower_obj.id + settings.ACCOUNT_NUMBER_START_FROM
+            account_no=(
+                    borrower_obj.id + settings.ACCOUNT_NUMBER_START_FROM
             ),
             balance=self.request.POST.get('balance'),
             interest_start_date=self.request.POST.get('interest_start_date'),

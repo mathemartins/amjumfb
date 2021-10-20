@@ -91,6 +91,10 @@
                       <i class="fa fa-arrow-left"></i> <a href="/account/profile/{{request.user.profile.slug}}/">Back To Dashoard</a>
                   </div>
                 </div>
+              {% else %}
+                <div class="text-center">
+                    <h4>User Is Yet To Update Profile, No Loan Record For This User</h4>
+                </div>
               {% endif %}
             </p>
           </div>

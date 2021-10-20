@@ -86,7 +86,7 @@
                     <b>Account Number</b> <a class="float-right">{{ borrower_acc }}</a>
                   </li>
                   <li class="list-group-item">
-                    <b>Account Number</b> <a class="float-right">{{ borrower_acc.account_type }}</a>
+                    <b>Account Type</b> <a class="float-right">{{ borrower_acc.account_type }}</a>
                   </li>
                 </ul>
 
@@ -133,14 +133,6 @@
 
                 <p class="text-muted">
                     Additional notes about borrower
-                </p>
-
-                <hr>
-
-                <p>
-                    <a href="{% url 'borrowers-url:borrower-update' object.slug borrower_obj.slug %}" class="btn btn-success">
-                        Edit Borrowers Information
-                    </a>
                 </p>
               </div>
               <!-- /.card-body -->
