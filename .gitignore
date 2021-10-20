@@ -132,6 +132,5 @@ dmypy.json
 .pyre/
 
 # don't track this settings
-amjuLoans/settings/local.py
 .idea/workspace.xml
 reports

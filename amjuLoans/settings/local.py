@@ -16,7 +16,6 @@ import os
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -26,7 +25,7 @@ SECRET_KEY = '(=vw2)fyh)4uit)gty2z7g-icg$3a^zc3w-eb)v+)@tncxd%))'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-BASE_URL = 'https://amju.herokuapp.com'
+BASE_URL = 'http://127.0.0.1:8000'
 
 ALLOWED_HOSTS = ['*']
 
@@ -37,7 +36,6 @@ MANAGERS = (
 ADMINS = MANAGERS
 
 AUTH_USER_MODEL = 'accounts.User'
-
 
 # Application definition
 
@@ -77,7 +75,7 @@ INSTALLED_APPS = [
     'search',
 ]
 
-X_FRAME_OPTIONS='SAMEORIGIN'
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 FORCE_SESSION_TO_ONE = False
 FORCE_INACTIVE_USER_ENDSESSION = False
 
@@ -119,21 +117,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'amjuLoans.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'db1hh10epfr8b4',
-        'USER': 'sdwmqtmnuzvtjq',
-        'PASSWORD': 'e3c554538e9c370831e8bef391726362206ab1901f4535ec31d63f5b8f54e50f',
-        'HOST': 'ec2-3-214-4-151.compute-1.amazonaws.com',
-        'PORT': '5432'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db_amjuLoans_new.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -153,7 +145,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -166,7 +157,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -200,11 +190,10 @@ SECURE_HSTS_SECONDS = None
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False
 SECURE_FRAME_DENY = False
 
-ACCOUNT_NUMBER_START_FROM = 1000000000
+ACCOUNT_NUMBER_START_FROM = 9000000000
 MINIMUM_DEPOSIT_AMOUNT = 500
 MINIMUM_WITHDRAWAL_AMOUNT = 500
 
 from amjuLoans import celery_config
-from amjuLoans.ssl_config import *
 
 from amjuLoans.restconf.main import *
