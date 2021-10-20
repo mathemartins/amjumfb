@@ -3,6 +3,7 @@ import os
 import random
 import string
 
+import math
 from django.utils import timezone
 from django.utils.text import slugify
 
@@ -16,10 +17,6 @@ def get_last_month_data(today):
     last_month_end = this_month_start - datetime.timedelta(days=1)
     last_month_start = datetime.datetime(last_month_end.year, last_month_end.month, 1)
     return (last_month_start, last_month_end)
-
-
-def get_next_month(days):
-    return timezone.now() + timezone.timedelta(days=days)
 
 
 def get_trial_days():
@@ -217,7 +214,7 @@ def armotizationLoanCalculator(pAmount, interest, nRepayment):
     nRepayment = int(nRepayment)
 
     sInterest = pAmount * (interest_ / 100)
-    sRepayment = pAmount / nRepayment
+    sRepayment = math.ceil(pAmount / nRepayment)
 
     return int(sRepayment + sInterest)
 
