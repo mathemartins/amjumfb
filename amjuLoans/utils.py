@@ -18,6 +18,10 @@ def get_last_month_data(today):
     return (last_month_start, last_month_end)
 
 
+def get_next_month(days):
+    return timezone.now() + timezone.timedelta(days=days)
+
+
 def get_trial_days():
     return timezone.now() + timezone.timedelta(days=30)
 
